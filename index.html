@@ -1,539 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<<<<<<< HEAD
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Pokémon Memory Game</title>
-  <link rel="stylesheet" href="styles.css">
-=======
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pokémon Memory Game</title>
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#D32F2F">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-<style>
-:root{
- --primary:#D32F2F;
- --surface:#FAFAFA;
- --card:#FFFFFF;
- --success:#E8F5E9;
- --text:#212121;
-}
-body{
- font-family:'Inter',sans-serif;
- margin:0;
- padding:16px;
- background:var(--surface);
- color:var(--text);
-}
-header{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:12px;
-}
-h1{font-size:20px;font-weight:700;margin:0;}
-button{
- border-radius:999px;
- padding:12px 18px;
- border:none;
- font-weight:600;
- background:var(--primary);
- color:white;
-}
-#counter{text-align:center;font-weight:600;margin-bottom:12px;}
-#guessInput{
- width:100%;
- padding:14px;
- font-size:16px;
- border-radius:12px;
- border:1px solid #ddd;
- margin-bottom:12px;
-}
-#list{max-height:65vh;overflow-y:auto;}
-.row{
- display:flex;
- align-items:center;
- padding:12px;
- margin-bottom:8px;
- background:var(--card);
- border-radius:14px;
- box-shadow:0 2px 6px rgba(0,0,0,0.06);
- transition:background 0.3s ease;
-}
-.row.flash{background:var(--success);}
-.index{width:36px;color:#999;}
-.sprite{width:40px;height:40px;margin-right:14px;image-rendering:pixelated;}
-.hidden-name{color:transparent;}
-.missed-name{color:var(--primary);}
-.grayscale{filter:grayscale(100%);}
-.hidden-row{display:none;}
-.overlay{
- position:fixed;
- inset:0;
- background:rgba(0,0,0,0.6);
- display:none;
- justify-content:center;
- align-items:center;
- z-index:3000;
-}
-.panel{
- background:white;
- padding:24px;
- border-radius:16px;
- width:90%;
- max-width:360px;
- text-align:center;
-}
-#celebration{
- background:rgba(0,0,0,0.9);
- color:white;
- flex-direction:column;
- z-index:4000;
-}
-.confetti{
- position:fixed;
- width:8px;height:14px;
- top:-20px;
- animation:fall linear forwards;
-}
-@keyframes fall{
- to{transform:translateY(110vh) rotate(720deg);}
-}
-.toggle{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin:10px 0;
-}
-#loading{text-align:center;padding:20px;}
-</style>
->>>>>>> parent of 8449175 (Add files via upload)
+<link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <div id="app">
 
-<<<<<<< HEAD
-    <!-- HEADER -->
-    <header>
-      <h1>Pokémon Memory Game</h1>
-      <button id="settingsBtn">⚙️</button>
-    </header>
-
-    <!-- COUNTER -->
-    <div id="counter">0 / 151</div>
-
-    <!-- INPUT -->
-    <div id="inputContainer">
-      <input id="guessInput" type="text" placeholder="Who's that Pokémon?" autocomplete="off">
-    </div>
-
-    <!-- SHOW MISSED BUTTON -->
-    <button id="missedBtn" class="hidden">Show Only Missed</button>
-
-    <!-- LIST -->
-    <div id="list"></div>
-
-  </div>
-
-  <!-- SETTINGS OVERLAY -->
-  <div id="settingsOverlay">
-    <div id="settingsPanel">
-
-      <h3>Audio</h3>
-
-      <div class="toggle">
-        <input type="checkbox" id="cryToggle">
-        <span>Pokémon Cries</span>
-      </div>
-
-      <div class="toggle">
-        <input type="checkbox" id="musicToggle">
-        <span>Background Music</span>
-      </div>
-
-      <hr>
-
-      <h3>Game</h3>
-
-      <button id="openSelect">Pokémon Select</button>
-      <button id="giveUpBtn">Give Up</button>
-      <button id="restartBtn">Reset</button>
-
-      <br><br>
-      <button id="closeSettings">Close</button>
-
-    </div>
-  </div>
-
-  <!-- FILTER DRAWER OVERLAY -->
-  <div id="sheetOverlay"></div>
-
-  <!-- FILTER DRAWER -->
-  <div id="pokemonSheet">
-
-    <h3>Select Pokémon</h3>
-
-    <div class="toggle">
-      <input type="checkbox" id="selectAll">
-      <span>Select All</span>
-    </div>
-
-    <div class="toggle">
-      <input type="checkbox" id="unselectAll">
-      <span>Unselect All</span>
-    </div>
-
-    <div class="filter-divider"></div>
-
-    <div id="categoryContainer"></div>
-
-    <br>
-    <button id="doneBtn">Done</button>
-
-    <div id="emptyMessage" class="hidden">
-      <p>No Pokémon selected</p>
-    </div>
-
-  </div>
-
-  <!-- CELEBRATION OVERLAY -->
-  <div id="celebration">
-    <h2>🎉 Complete! 🎉</h2>
-    <button id="closeCelebration">Close</button>
-  </div>
-
-  <!-- JS (ORDER MATTERS) -->
-  <script src="js/state.js"></script>
-  <script src="js/audio.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/game.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/main.js"></script>
-
-=======
 <header>
-<h1>Pokémon Memory Game</h1>
-<button onclick="openSettings()">⚙️</button>
+  <h1>Pokémon Memory Game</h1>
+  <button id="settingsBtn">⚙️</button>
 </header>
 
 <div id="counter">0 / 151</div>
+
 <input id="guessInput" placeholder="Who's that Pokémon?">
-<button id="filterBtn" style="display:none;margin-bottom:12px;" onclick="toggleFilter()">Show Only Missed</button>
+
+<button id="missedBtn" class="hidden">Show Only Missed</button>
 
 <div id="list"></div>
+<div id="emptyMessage" class="hidden">No Pokémon selected</div>
 <div id="loading">Loading Pokémon...</div>
 
-<!-- Confirm -->
+<!-- Confirm Give Up -->
 <div id="confirmOverlay" class="overlay">
-<div class="panel">
-Are you sure you want to give up?
-<div style="margin-top:15px;display:flex;gap:10px;">
-<button onclick="closeConfirm()">Cancel</button>
-<button onclick="confirmGiveUp()">Give Up</button>
-</div>
-</div>
+  <div class="panel">
+    Are you sure you want to give up?
+    <div class="rowButtons">
+      <button id="cancelGiveUp">Cancel</button>
+      <button id="confirmGiveUp">Give Up</button>
+    </div>
+  </div>
 </div>
 
 <!-- Settings -->
 <div id="settingsOverlay" class="overlay">
-<div class="panel">
-<h3>Settings</h3>
+  <div class="panel">
+    <h3>Settings</h3>
+
+    <div class="toggle">
+      <span>Pokémon Cries</span>
+      <input type="checkbox" id="cryToggle">
+    </div>
+
+    <div class="toggle">
+      <span>Background Music</span>
+      <input type="checkbox" id="musicToggle">
+    </div>
+
+    <button id="openSelect">Pokémon Select</button>
+    <button id="giveUpBtn">Give Up</button>
+    <button id="restartBtn">Reset</button>
+    <button id="closeSettings">Close</button>
+  </div>
+</div>
+
+<!-- Pokémon Select Bottom Sheet -->
+<div id="sheetOverlay" class="sheet-overlay"></div>
+<div id="pokemonSheet" class="bottom-sheet">
+  <h3>Select Pokémon</h3>
 
 <div class="toggle">
-<span>Pokémon Cries</span>
-<input type="checkbox" id="cryToggle">
+  <input type="checkbox" id="selectAll">
+  <span>Select All</span>
 </div>
 
 <div class="toggle">
-<span>Background Music</span>
-<input type="checkbox" id="musicToggle">
+  <input type="checkbox" id="unselectAll">
+  <span>Unselect All</span>
 </div>
 
-<br>
-<button onclick="openConfirm()">Give Up</button>
-<br><br>
-<button onclick="restartGame()">Restart Game</button>
-<br><br>
-<button onclick="closeSettings()">Close</button>
-</div>
+  <div class="filter-divider"></div>
+
+  <div id="categoryContainer"></div>
+
+  <button id="doneBtn">Done</button>
 </div>
 
 <!-- Celebration -->
 <div id="celebration" class="overlay">
-<h2>🎉 151 / 151 Complete! 🎉</h2>
-<button onclick="closeCelebration()">Close</button>
+  <h2>🎉 Complete! 🎉</h2>
+  <button id="closeCelebration">Close</button>
 </div>
 
-<script>
-/* ---------- CONSTANTS ---------- */
-const MUSIC_FILE="music.mp3";
-const CELEBRATION_FILE="celebration.mp3";
-const SAVE_KEY="gen1-memory-progress";
-
-/* ---------- STATE ---------- */
-let pokemonData=[];
-let guessedCount=0;
-let gameFinished=false;
-let showingMissed=false;
-
-let criesEnabled=true;
-let musicEnabled=true;
-
-let currentCry=null;
-let bgMusic=null;
-let musicStarted=false;
-
-/* ---------- UTIL ---------- */
-const toTitleCase=s=>s.replace(/\b\w/g,l=>l.toUpperCase());
-const normalize=s=>s.toLowerCase().trim()
-.replace(/['’.\- ]/g,"")
-.normalize("NFD")
-.replace(/[\u0300-\u036f]/g,"");
-
-/* ---------- AUDIO ---------- */
-function startMusic(){
- if(musicStarted||!musicEnabled) return;
- bgMusic=new Audio(MUSIC_FILE);
- bgMusic.loop=true;
- bgMusic.volume=0.4;
- bgMusic.play();
- musicStarted=true;
-}
-
-document.addEventListener("click",startMusic,{once:true});
-
-function fadeOutMusic(){
- if(!bgMusic) return;
- let vol=bgMusic.volume;
- const fade=setInterval(()=>{
-  vol-=0.05;
-  if(vol<=0){
-   clearInterval(fade);
-   bgMusic.pause();
-   bgMusic.currentTime=0;
-  }else{
-   bgMusic.volume=vol;
-  }
- },100);
-}
-
-function playCry(url){
- if(!criesEnabled||gameFinished) return;
- if(currentCry){
-  currentCry.pause();
-  currentCry.currentTime=0;
- }
- currentCry=new Audio(url);
- currentCry.play();
-}
-
-function playCelebration(){
- if(!musicEnabled) return;
- new Audio(CELEBRATION_FILE).play();
-}
-
-/* ---------- SAVE ---------- */
-function save(){
- const ids=pokemonData.filter(p=>p.guessed).map(p=>p.id);
- localStorage.setItem(SAVE_KEY,JSON.stringify(ids));
-}
-function load(){
- return JSON.parse(localStorage.getItem(SAVE_KEY)||"[]");
-}
-
-/* ---------- INIT ---------- */
-async function init(){
- criesEnabled=localStorage.getItem("criesEnabled")!=="false";
- musicEnabled=localStorage.getItem("musicEnabled")!=="false";
- document.getElementById("cryToggle").checked=criesEnabled;
- document.getElementById("musicToggle").checked=musicEnabled;
-
- const saved=load();
-
- try{
-  const responses=await Promise.all(
-   Array.from({length:151},(_,i)=>
-    fetch(`https://pokeapi.co/api/v2/pokemon/${i+1}`).then(r=>r.json())
-   )
-  );
-
-  responses.forEach((data,i)=>{
-   createRow(i+1);
-   const sprite=data.sprites?.versions?.["generation-i"]?.["red-blue"]?.front_default;
-   const cry=data.cries?.latest;
-   const name=toTitleCase(data.name);
-   const guessed=saved.includes(i+1);
-
-   pokemonData.push({id:i+1,name,sprite,cry,guessed});
-   if(guessed){
-    reveal(i+1,name,sprite);
-    guessedCount++;
-   }
-  });
-
-  document.getElementById("loading").style.display="none";
-  updateCounter();
- }catch{
-  document.getElementById("loading").textContent="Failed to load Pokémon.";
- }
-}
-
-/* ---------- ROWS ---------- */
-function createRow(i){
- const row=document.createElement("div");
- row.className="row";
- row.id=`row-${i}`;
- row.innerHTML=`
-  <div class="index">${i}</div>
-  <img class="sprite" id="sprite-${i}">
-  <div class="name hidden-name" id="name-${i}">.</div>
- `;
- document.getElementById("list").appendChild(row);
-}
-
-function reveal(id,name,sprite){
- const nameEl=document.getElementById(`name-${id}`);
- nameEl.textContent=name;
- nameEl.classList.remove("hidden-name");
- if(sprite) document.getElementById(`sprite-${id}`).src=sprite;
-}
-
-/* ---------- GAME ---------- */
-function updateCounter(){
- document.getElementById("counter").textContent=`${guessedCount} / 151`;
-}
-
-function scrollToRow(id){
- const row=document.getElementById(`row-${id}`);
- const list=document.getElementById("list");
- const pos=row.offsetTop-(list.clientHeight/2)+(row.offsetHeight/2);
- list.scrollTo({top:pos,behavior:"smooth"});
-}
-
-document.getElementById("guessInput").addEventListener("input",()=>{
- if(gameFinished) return;
- const input=document.getElementById("guessInput");
- const guess=normalize(input.value);
- if(!guess) return;
-
- const pokemon=pokemonData.find(p=>normalize(p.name)===guess);
-
- if(pokemon&&!pokemon.guessed){
-  pokemon.guessed=true;
-  guessedCount++;
-  reveal(pokemon.id,pokemon.name,pokemon.sprite);
-  updateCounter();
-  playCry(pokemon.cry);
-  save();
-  scrollToRow(pokemon.id);
-
-  const row=document.getElementById(`row-${pokemon.id}`);
-  row.classList.add("flash");
-  setTimeout(()=>row.classList.remove("flash"),500);
-
-  input.value="";
-  if(guessedCount===151) completeGame();
- }
-});
-
-function completeGame(){
- gameFinished=true;
- document.getElementById("guessInput").disabled=true;
- fadeOutMusic();
- playCelebration();
- launchConfetti();
- document.getElementById("celebration").style.display="flex";
-}
-
-function giveUp(){
- gameFinished=true;
- document.getElementById("guessInput").disabled=true;
- fadeOutMusic();
-
- let firstMissed=null;
- pokemonData.forEach(p=>{
-  if(!p.guessed){
-   if(!firstMissed) firstMissed=p.id;
-   reveal(p.id,p.name,p.sprite);
-   document.getElementById(`name-${p.id}`).classList.add("missed-name");
-   document.getElementById(`sprite-${p.id}`).classList.add("grayscale");
-  }
- });
- if(firstMissed) scrollToRow(firstMissed);
- document.getElementById("filterBtn").style.display="block";
- localStorage.removeItem(SAVE_KEY);
-}
-
-/* ---------- CONFETTI ---------- */
-function launchConfetti(){
- for(let i=0;i<120;i++){
-  const c=document.createElement("div");
-  c.className="confetti";
-  c.style.left=Math.random()*100+"vw";
-  c.style.background=`hsl(${Math.random()*360},80%,60%)`;
-  c.style.animationDuration=(2+Math.random()*3)+"s";
-  document.body.appendChild(c);
-  setTimeout(()=>c.remove(),5000);
- }
-}
-
-/* ---------- UI ---------- */
-function openSettings(){
- document.getElementById("settingsOverlay").style.display="flex";
- document.body.style.overflow="hidden";
-}
-function closeSettings(){
- document.getElementById("settingsOverlay").style.display="none";
- document.body.style.overflow="";
-}
-function openConfirm(){
- document.getElementById("confirmOverlay").style.display="flex";
-}
-function closeConfirm(){
- document.getElementById("confirmOverlay").style.display="none";
-}
-function confirmGiveUp(){
- closeConfirm();
- giveUp();
-}
-function closeCelebration(){
- document.getElementById("celebration").style.display="none";
-}
-function restartGame(){
- localStorage.removeItem(SAVE_KEY);
- location.reload();
-}
-function toggleFilter(){
- showingMissed=!showingMissed;
- pokemonData.forEach(p=>{
-  const row=document.getElementById(`row-${p.id}`);
-  if(showingMissed&&p.guessed) row.classList.add("hidden-row");
-  else row.classList.remove("hidden-row");
- });
- document.getElementById("filterBtn").textContent=
- showingMissed?"Show All":"Show Only Missed";
-}
-
-/* ---------- TOGGLES ---------- */
-document.getElementById("cryToggle").addEventListener("change",e=>{
- criesEnabled=e.target.checked;
- localStorage.setItem("criesEnabled",criesEnabled);
-});
-document.getElementById("musicToggle").addEventListener("change",e=>{
- musicEnabled=e.target.checked;
- localStorage.setItem("musicEnabled",musicEnabled);
- if(!musicEnabled) fadeOutMusic();
-});
-
-/* ---------- START ---------- */
-init();
-</script>
->>>>>>> parent of 8449175 (Add files via upload)
+<script src="js/state.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
