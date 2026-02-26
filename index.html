@@ -1,98 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pokémon Memory Game</title>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#D32F2F">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pokémon Memory Game</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<div id="app">
-<header>
-  <h1>Pokémon Memory Game</h1>
-  <button id="settingsBtn">⚙️</button>
-</header>
+  <div id="app">
 
-<div id="counter">0 / 151</div>
+    <!-- HEADER -->
+    <header>
+      <h1>Pokémon Memory Game</h1>
+      <button id="settingsBtn">⚙️</button>
+    </header>
 
-<input id="guessInput" placeholder="Who's that Pokémon?">
+    <!-- COUNTER -->
+    <div id="counter">0 / 151</div>
 
-<button id="missedBtn" class="hidden">Show Only Missed</button>
+    <!-- INPUT -->
+    <div id="inputContainer">
+      <input id="guessInput" type="text" placeholder="Who's that Pokémon?" autocomplete="off">
+    </div>
 
-<div id="list"></div>
-<div id="emptyMessage" class="hidden">No Pokémon selected</div>
-<div id="loading">Loading Pokémon...</div>
+    <!-- SHOW MISSED BUTTON -->
+    <button id="missedBtn" class="hidden">Show Only Missed</button>
 
-<!-- Confirm Give Up -->
-<div id="confirmOverlay" class="overlay">
-  <div class="panel">
-    Are you sure you want to give up?
-    <div class="rowButtons">
-      <button id="cancelGiveUp">Cancel</button>
-      <button id="confirmGiveUp">Give Up</button>
+    <!-- LIST -->
+    <div id="list"></div>
+
+  </div>
+
+  <!-- SETTINGS OVERLAY -->
+  <div id="settingsOverlay">
+    <div id="settingsPanel">
+
+      <h3>Audio</h3>
+
+      <div class="toggle">
+        <input type="checkbox" id="cryToggle">
+        <span>Pokémon Cries</span>
+      </div>
+
+      <div class="toggle">
+        <input type="checkbox" id="musicToggle">
+        <span>Background Music</span>
+      </div>
+
+      <hr>
+
+      <h3>Game</h3>
+
+      <button id="openSelect">Pokémon Select</button>
+      <button id="giveUpBtn">Give Up</button>
+      <button id="restartBtn">Reset</button>
+
+      <br><br>
+      <button id="closeSettings">Close</button>
+
     </div>
   </div>
-</div>
 
-<!-- Settings -->
-<div id="settingsOverlay" class="overlay">
-  <div class="panel">
-    <h3>Settings</h3>
+  <!-- FILTER DRAWER OVERLAY -->
+  <div id="sheetOverlay"></div>
+
+  <!-- FILTER DRAWER -->
+  <div id="pokemonSheet">
+
+    <h3>Select Pokémon</h3>
 
     <div class="toggle">
-      <span>Pokémon Cries</span>
-      <input type="checkbox" id="cryToggle">
+      <input type="checkbox" id="selectAll">
+      <span>Select All</span>
     </div>
 
     <div class="toggle">
-      <span>Background Music</span>
-      <input type="checkbox" id="musicToggle">
+      <input type="checkbox" id="unselectAll">
+      <span>Unselect All</span>
     </div>
 
-    <button id="openSelect">Pokémon Select</button>
-    <button id="giveUpBtn">Give Up</button>
-    <button id="restartBtn">Reset</button>
-    <button id="closeSettings">Close</button>
+    <div class="filter-divider"></div>
+
+    <div id="categoryContainer"></div>
+
+    <br>
+    <button id="doneBtn">Done</button>
+
+    <div id="emptyMessage" class="hidden">
+      <p>No Pokémon selected</p>
+    </div>
+
   </div>
-</div>
 
-<!-- Pokémon Select Bottom Sheet -->
-<div id="sheetOverlay" class="sheet-overlay"></div>
-<div id="pokemonSheet" class="bottom-sheet">
-  <h3>Select Pokémon</h3>
+  <!-- CELEBRATION OVERLAY -->
+  <div id="celebration">
+    <h2>🎉 Complete! 🎉</h2>
+    <button id="closeCelebration">Close</button>
+  </div>
 
-<div class="toggle">
-  <input type="checkbox" id="selectAll">
-  <span>Select All</span>
-</div>
+  <!-- JS (ORDER MATTERS) -->
+  <script src="js/state.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
 
-<div class="toggle">
-  <input type="checkbox" id="unselectAll">
-  <span>Unselect All</span>
-</div>
-
-  <div class="filter-divider"></div>
-
-  <div id="categoryContainer"></div>
-
-  <button id="doneBtn">Done</button>
-</div>
-
-<!-- Celebration -->
-<div id="celebration" class="overlay">
-  <h2>🎉 Complete! 🎉</h2>
-  <button id="closeCelebration">Close</button>
-</div>
-
-<script src="js/state.js"></script>
-<script src="js/audio.js"></script>
-<script src="js/filters.js"></script>
-<script src="js/game.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/main.js"></script>
-</div>
 </body>
 </html>
