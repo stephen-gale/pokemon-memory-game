@@ -1,6 +1,7 @@
 /* ================= FILTERS ================= */
 
 function buildCategoryUI(){
+  loadFilters(); // restore saved filters before rendering
 
   const container = document.getElementById("categoryContainer");
   container.innerHTML = "";
@@ -16,6 +17,21 @@ function buildCategoryUI(){
   });
 
   attachFilterListeners();
+}
+
+/* ================= FILTER PERSISTENCE ================= */
+
+const FILTER_SAVE_KEY = "gen1-memory-filters";
+
+function saveFilters(){
+  localStorage.setItem(FILTER_SAVE_KEY, JSON.stringify([...activeCategories]));
+}
+
+function loadFilters(){
+  const saved = JSON.parse(localStorage.getItem(FILTER_SAVE_KEY) || "null");
+  if(Array.isArray(saved)){
+    activeCategories = new Set(saved);
+  }
 }
 
 /* ---------- Attach Listeners ---------- */
@@ -35,6 +51,8 @@ function attachFilterListeners(){
       activeCategories.delete(cat);
     }
 
+    saveFilters();
+
     syncSelectAllState();
     applyFilter();
   });
@@ -52,6 +70,8 @@ function attachFilterListeners(){
 
       document.getElementById("unselectAll").checked = false;
     }
+
+    saveFilters();
 
     applyFilter();
   });
@@ -71,6 +91,8 @@ function attachFilterListeners(){
       // Uncheck itself (as requested)
       e.target.checked = false;
     }
+
+    saveFilters();
 
     applyFilter();
   });

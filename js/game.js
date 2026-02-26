@@ -120,6 +120,10 @@ function resetGame(){
   /* Clear guesses */
   guessedGlobal.clear();
   saveProgress();
+  localStorage.removeItem(SAVE_KEY);
+
+  // CLEAR SAVED FILTERS
+  localStorage.removeItem("gen1-memory-filters");
 
   /* Reset rows cleanly */
   pokemonData.forEach(p=>{
