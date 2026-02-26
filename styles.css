@@ -1,4 +1,18 @@
 /* ======================================================
+   THEME VARIABLES
+====================================================== */
+
+:root {
+  --primary: #cc0000;
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --text: #222;
+  --muted: #888;
+  --divider: #ddd;
+  --overlay: rgba(0,0,0,0.5);
+}
+
+/* ======================================================
    GLOBAL LAYOUT
 ====================================================== */
 
@@ -11,8 +25,8 @@ html, body {
 
 body {
   font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  color: #222;
+  background: var(--bg);
+  color: var(--text);
 
   display: flex;
   flex-direction: column;
@@ -34,7 +48,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 14px 16px;
-  background: #cc0000;
+  background: var(--primary);
   color: white;
 }
 
@@ -79,7 +93,7 @@ header button {
 }
 
 #guessInput:focus {
-  border-color: #cc0000;
+  border-color: var(--primary);
 }
 
 /* ======================================================
@@ -97,11 +111,13 @@ header button {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: white;
+
+  background: var(--card);
   margin-bottom: 8px;
   padding: 10px 12px;
   border-radius: 10px;
   min-height: 52px;
+
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
@@ -112,7 +128,7 @@ header button {
 .index {
   width: 36px;
   font-size: 13px;
-  color: #999;
+  color: var(--muted);
 }
 
 .sprite {
@@ -132,7 +148,7 @@ header button {
 }
 
 .missed-name {
-  color: #cc0000;
+  color: var(--primary);
   font-weight: 600;
 }
 
@@ -147,7 +163,7 @@ header button {
 #settingsOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: var(--overlay);
   display: none;
   justify-content: center;
   align-items: center;
@@ -155,7 +171,7 @@ header button {
 }
 
 #settingsPanel {
-  background: white;
+  background: var(--card);
   width: 90%;
   max-width: 400px;
   border-radius: 14px;
@@ -166,25 +182,36 @@ header button {
 }
 
 /* ======================================================
-   FILTER TOGGLES
+   FILTER TOGGLES (44px TAP TARGET)
 ====================================================== */
 
 .toggle {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 0;
+  gap: 12px;
+
+  min-height: 44px;
+  padding: 0 8px;
+
+  cursor: pointer;
+  user-select: none;
+  border-radius: 8px;
+}
+
+.toggle:active {
+  background: rgba(0,0,0,0.05);
 }
 
 .toggle input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
 }
 
-/* Divider under Unselect All */
+/* Divider */
 .filter-divider {
   height: 1px;
-  background: #ddd;
+  background: var(--divider);
   margin: 10px 0;
 }
 
@@ -205,12 +232,15 @@ header button {
   bottom: -100%;
   left: 0;
   right: 0;
-  background: white;
+
+  background: var(--card);
   border-top-left-radius: 18px;
   border-top-right-radius: 18px;
+
   padding: 20px;
   max-height: 80vh;
   overflow-y: auto;
+
   transition: bottom 0.3s ease;
   z-index: 1200;
 }
@@ -243,11 +273,13 @@ button {
   inset: 0;
   background: rgba(0,0,0,0.85);
   color: white;
+
   display: none;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   text-align: center;
+
   padding: 20px;
   z-index: 2000;
 }
