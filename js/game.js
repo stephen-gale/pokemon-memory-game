@@ -42,22 +42,23 @@ function handleGuess(inputEl){
   });
 
   if(pokemon && !guessedGlobal.has(pokemon.id)){
+  guessedGlobal.add(pokemon.id);
+  reveal(pokemon.id);
 
-    guessedGlobal.add(pokemon.id);
-    reveal(pokemon.id);
-
+  // 🧠 Only play cry if the Pokémon is visible under current filters
+  const rowEl = document.getElementById(`row-${pokemon.id}`);
+  const isVisible = rowEl && !rowEl.classList.contains("hidden-row");
+  if(criesEnabled && pokemon.cry && isVisible){
     playCry(pokemon.cry);
-    saveProgress();
-
-    updateCounter();
-    checkCompletion();
-
-    document.getElementById(`row-${pokemon.id}`)
-      .scrollIntoView({behavior:"smooth", block:"center"});
-
-    // ✅ Only clear when correct
-    inputEl.value = "";
   }
+
+  saveProgress();
+  updateCounter();
+  checkCompletion();
+  document.getElementById(`row-${pokemon.id}`)
+    .scrollIntoView({behavior:"smooth", block:"center"});
+  inputEl.value = "";
+}
 }
 
 /* ---------- Completion Check ---------- */

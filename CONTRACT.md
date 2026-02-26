@@ -49,7 +49,7 @@ No feature may be removed unless explicitly deleted from this contract.
 # 3️⃣ Audio System
 
 ## Pokémon Cries
-- Plays on correct guess
+- Plays on correct guess only if the Pokémon is currently visible under active filters
 - Stops previous cry if a new guess is entered
 - Disabled if Cry toggle is off
 - Toggle state persists across sessions
