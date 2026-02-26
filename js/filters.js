@@ -24,7 +24,6 @@ function attachFilterListeners(){
 
   const container = document.getElementById("categoryContainer");
 
-  /* Individual category toggles */
   container.addEventListener("change", e=>{
     const cat = e.target.dataset.cat;
     if(!cat) return;
@@ -40,52 +39,36 @@ function attachFilterListeners(){
   });
 
   /* Select All */
-  const selectAll = document.getElementById("selectAll");
-  selectAll.addEventListener("change", e=>{
-    if(e.target.checked){
+  document.getElementById("selectAll")
+    .addEventListener("change", e=>{
+      if(e.target.checked){
+        activeCategories.clear();
+        categories.forEach(c=>activeCategories.add(c));
 
-      activeCategories.clear();
-      categories.forEach(c=>activeCategories.add(c));
+        document.querySelectorAll("#categoryContainer input")
+          .forEach(cb=>cb.checked = true);
 
-      document.querySelectorAll("#categoryContainer input")
-        .forEach(cb=>cb.checked = true);
-
-      document.getElementById("unselectAll").checked = false;
-    }
-
-    applyFilter();
-  });
+        document.getElementById("unselectAll").checked = false;
+      }
+      applyFilter();
+    });
 
   /* Unselect All */
-  const unselectAll = document.getElementById("unselectAll");
-  unselectAll.addEventListener("change", e=>{
-    if(e.target.checked){
+  document.getElementById("unselectAll")
+    .addEventListener("change", e=>{
+      if(e.target.checked){
 
-      activeCategories.clear();
+        activeCategories.clear();
 
-      document.querySelectorAll("#categoryContainer input")
-        .forEach(cb=>cb.checked = false);
+        document.querySelectorAll("#categoryContainer input")
+          .forEach(cb=>cb.checked = false);
 
-      document.getElementById("selectAll").checked = false;
+        document.getElementById("selectAll").checked = false;
 
-      // Uncheck itself (as requested)
-      e.target.checked = false;
-    }
-
-    applyFilter();
-  });
-
-  /* Make entire toggle row tappable */
-document.querySelectorAll(".toggle").forEach(row => {
-  row.addEventListener("click", (e) => {
-
-    const checkbox = row.querySelector("input[type='checkbox']");
-    if (!checkbox) return;
-
-    checkbox.checked = !checkbox.checked;
-    checkbox.dispatchEvent(new Event("change"));
-  });
-});
+        e.target.checked = false;
+      }
+      applyFilter();
+    });
 }
 
 /* ---------- Sync Select All State ---------- */
@@ -140,13 +123,6 @@ function applyFilter(){
     }
   });
 
-  /* Empty message */
-  const emptyMessage = document.getElementById("emptyMessage");
-  if(emptyMessage){
-    emptyMessage.classList.toggle("hidden", visible !== 0);
-  }
-
-  /* Disable Done button if none selected */
   const doneBtn = document.getElementById("doneBtn");
   if(doneBtn){
     doneBtn.disabled = visible === 0;
