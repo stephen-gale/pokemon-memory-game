@@ -3,7 +3,11 @@
 const SAVE_KEY = "gen1-memory-progress";
 
 const legendaryList = ["articuno","zapdos","moltres","mewtwo","mew"];
-const starterList = ["bulbasaur","charmander","squirtle"];
+const starterList = [
+  "bulbasaur","ivysaur","venusaur",
+  "charmander","charmeleon","charizard",
+  "squirtle","wartortle","blastoise"
+];
 
 const categories = [
  "Starters","Legendary and Mythical",
