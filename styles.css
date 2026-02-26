@@ -166,33 +166,22 @@ header button {
 }
 
 /* ======================================================
-   FILTER TOGGLES (44px TAP TARGET)
+   FILTER TOGGLES
 ====================================================== */
 
 .toggle {
   display: flex;
   align-items: center;
-  gap: 12px;
-
-  min-height: 44px;
-  padding: 0 8px;
-
-  cursor: pointer;
-  user-select: none;
-  border-radius: 8px;
-}
-
-.toggle:active {
-  background: rgba(0,0,0,0.05);
+  gap: 10px;
+  padding: 8px 0;
 }
 
 .toggle input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  pointer-events: none; /* important: row handles tap */
+  width: 18px;
+  height: 18px;
 }
 
-/* Divider */
+/* Divider under Unselect All */
 .filter-divider {
   height: 1px;
   background: #ddd;
