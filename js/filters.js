@@ -74,6 +74,18 @@ function attachFilterListeners(){
 
     applyFilter();
   });
+
+  /* Make entire toggle row tappable */
+document.querySelectorAll(".toggle").forEach(row => {
+  row.addEventListener("click", (e) => {
+
+    const checkbox = row.querySelector("input[type='checkbox']");
+    if (!checkbox) return;
+
+    checkbox.checked = !checkbox.checked;
+    checkbox.dispatchEvent(new Event("change"));
+  });
+});
 }
 
 /* ---------- Sync Select All State ---------- */
