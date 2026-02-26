@@ -45,7 +45,11 @@ document.getElementById("guessInput")
 
   doneBtn.onclick = closeSheet;
 
-  sheetOverlay.onclick = closeSheet;
+  sheetOverlay.addEventListener("click", e => {
+    if (e.target === sheetOverlay) {
+      closeSheet();
+    }
+  });
 
   /* ---- Give Up ---- */
   document.getElementById("giveUpBtn").onclick=giveUp;

@@ -78,9 +78,11 @@ No feature may be removed unless explicitly deleted from this contract.
 - Tap outside closes
 - Swipe down closes
 - Locks background scroll while open
+- Tapping outside the Pokémon Select sheet closes the sheet (same as pressing Done).
 
 ## Categories
-- Starters (base forms only)
+- Starters (full evolution lines)
+(all evolution forms of the three Gen I starter Pokémon)
 - Legendary and Mythical
 - Normal
 - Fire
@@ -105,10 +107,8 @@ No feature may be removed unless explicitly deleted from this contract.
 - Filter changes apply instantly
 - Completion recalculated instantly
 - If all categories selected → show all 151 (no logic edge cases)
-- If zero selected:
-  - Show "No Pokémon selected"
-  - Disable Done button
-  - Cannot close drawer
+- Active category selections persist across page refresh via localStorage.
+- Filter selections only reset when the Reset option in Settings is pressed.
 
 ## Controls
 - Select All
