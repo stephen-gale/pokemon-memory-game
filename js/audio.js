@@ -1,6 +1,6 @@
 /* ================= AUDIO ================= */
 
-const MUSIC_FILE = "music.mp3";
+const MUSIC_FILE = "music-palettetown.mp3";
 const CELEBRATION_FILE = "celebration.mp3";
 
 let bgMusic = null;
