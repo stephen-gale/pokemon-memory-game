@@ -144,6 +144,13 @@ button:disabled{
   text-align:center;
 }
 
+/* Stack settings buttons vertically */
+#settingsOverlay .panel > button {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+}
+
 .rowButtons{
   display:flex;
   gap:10px;
