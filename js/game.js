@@ -177,6 +177,20 @@ function resetGame(){
   activeCategories.clear();
   categories.forEach(c=>activeCategories.add(c));
 
+  // 🔽 Clear persisted filter state
+localStorage.removeItem("gen1-memory-filters");
+
+// 🔽 Reset all category checkboxes to checked
+document.querySelectorAll("#categoryContainer input[data-cat]")
+  .forEach(cb => cb.checked = true);
+
+// 🔽 Reset Select All / Unselect All controls
+const selectAll = document.getElementById("selectAll");
+const unselectAll = document.getElementById("unselectAll");
+
+if(selectAll) selectAll.checked = true;
+if(unselectAll) unselectAll.checked = false;
+
   /* Reset missed toggle */
   showingMissedOnly = false;
   const missedBtn = document.getElementById("missedBtn");
