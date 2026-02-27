@@ -192,82 +192,120 @@ Reset button located in Settings.
 
 # 10. Timer System
 
-## Display & Format
-- A stopwatch timer is available in the header.
-- Timer display shows elapsed minutes and seconds in `MM:SS` format.
+## Overview
+An optional stopwatch Timer allows players to time their run.
+
+The Timer counts upward and integrates with guessing, completion, filters, reset, and visibility behavior.
+
+---
+
+## Display & Layout
+
+- The Timer and Play/Pause control appear on the same row as the Guess Counter.
+- When the Timer is visible:
+  - The Play/Pause control and Timer display are aligned to the left edge.
+  - The Guess Counter is aligned to the right edge.
+- When the Timer is hidden:
+  - The Guess Counter is centered horizontally.
+- The Timer and Guess Counter must not overlap at any viewport width.
+- Timer format is `MM:SS`.
 - Timer starts at `00:00`.
-- Timer display appears to the left of the Play/Pause control.
+
+---
 
 ## Timer Limits
+
 - Timer counts upward.
 - Timer caps at **99:59**.
 - Upon reaching 99:59:
   - Timer stops.
-  - Play/Pause control shows the Pause state.
-  - Timer control becomes disabled.
-  - Elapsed time remains frozen at 99:59.
+  - Play/Pause control displays Pause state.
+  - Play/Pause control becomes disabled.
+  - Time remains frozen at 99:59.
+
+---
 
 ## Start Behaviour
-- Timer starts when:
-  - The Play button is pressed, or
-  - Any guess is entered (regardless of correctness or visibility).
-- Timer transitions from Stopped or Paused to Running.
-- Timer does not start if already Locked (after completion, give up, or cap).
+
+The Timer starts when:
+- The Play button is pressed, or
+- Any guess is entered (correct or incorrect, visible or filtered).
+
+The Timer:
+- Transitions from Stopped or Paused to Running.
+- Does not restart if in Locked state.
+
+---
 
 ## Pause Behaviour
-- Timer pauses when:
-  - Play/Pause control is pressed while running,
-  - The Settings overlay is opened,
-  - The browser tab or window loses visibility (e.g., tab switch, minimise, device lock).
-- Timer remains paused until Play is pressed or next guess is entered.
-- Pausing does not affect guessing functionality.
 
-## Reset Behaviour
-- Reset (in Settings) resets the timer to `00:00`.
-- Timer returns to Stopped state.
-- Play/Pause control returns to the Play state and is enabled.
-- Reset does not change the Hide Timer setting.
-- Reset does not affect audio toggle settings.
+The Timer pauses when:
+- Play/Pause control is pressed while running.
+- The Settings overlay is opened.
+- The browser tab or window loses visibility (tab switch, minimize, device lock).
+
+When visibility returns:
+- The Timer remains paused.
+- It resumes only when Play is pressed or a guess is entered.
+
+Pausing does not disable guessing.
+
+---
 
 ## Completion & Give Up Behaviour
-- Upon guessing all visible Pokémon (completion):
-  - Timer pauses.
-  - Timer enters a locked state.
-  - Play/Pause control shows Pause and is disabled.
-  - Elapsed time is shown on the Completion screen if the timer is visible.
-- Upon executing Give Up:
-  - Timer pauses.
-  - Timer enters a locked state.
-  - Play/Pause control shows Pause and is disabled.
-  - Elapsed time is shown on the Completion screen if the timer is visible.
 
-## Filter & Settings Interaction
-- Changing filters mid-run does not pause or reset the timer.
-- The Settings menu opening causes the timer to pause.
-- The browser visibility change (tab/window unfocused) causes the timer to pause.
+Upon completion (all visible Pokémon guessed):
+- Timer pauses.
+- Timer enters Locked state.
+- Play/Pause control displays Pause and is disabled.
+- Elapsed time appears on the Completion screen if the Timer is visible.
+
+Upon Give Up:
+- Timer pauses.
+- Timer enters Locked state.
+- Play/Pause control displays Pause and is disabled.
+- Elapsed time appears on the Completion screen if the Timer is visible.
+
+---
+
+## Filter Interaction
+
+- Changing filters does not pause or reset the Timer.
+- Timer continues running while filters are adjusted.
+
+---
 
 ## Hide Timer Behaviour
-- Settings includes a “Hide Timer” option.
-- Hiding the timer conceals the display and Play/Pause control.
-- Hiding does not stop or reset the timer; it continues counting in the background.
-- Completion screen does not display elapsed time when hidden.
-- If the timer is re-shown before or after completion, current elapsed time is displayed.
-- The Hide Timer setting persists across page refresh.
+
+- Settings include a “Hide Timer” option.
+- When enabled:
+  - Timer display and Play/Pause control are hidden.
+  - Timer continues functioning in the background.
+  - Completion screen does not display elapsed time.
+- When disabled:
+  - Timer display reappears.
+  - Current elapsed time is shown.
+- Hide Timer setting persists across refresh.
 - Reset does not change the Hide Timer setting.
 
-## Layout & Positioning
-- The Timer and Play/Pause control appear on the same row as the Guess Counter.
-- When the Timer is visible:
-  - The Play/Pause control and Timer display are aligned to the left.
-  - The Guess Counter is aligned to the right.
-- When the Timer is hidden:
-  - The Guess Counter is centered horizontally.
-- The Timer and Guess Counter must not overlap at any viewport width.
+---
 
-## Persistence Across Refresh
+## Reset Behaviour
+
+Reset:
+- Resets Timer to `00:00`.
+- Returns Timer to Stopped state.
+- Re-enables Play/Pause control.
+- Does not change Hide Timer setting.
+- Does not change Audio settings.
+
+---
+
+## Persistence
+
 - Timer state (Stopped, Paused, Locked) and elapsed time persist across refresh.
-- If a Running timer is refreshed, it restores in Paused state.
-- Timer does not accumulate time while the page is not active (e.g., hidden, refreshed, or unfocused).
+- If refreshed while Running, Timer restores in Paused state.
+- Timer does not accumulate time while page is not visible.
 
 ---
 
