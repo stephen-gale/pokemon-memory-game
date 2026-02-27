@@ -255,6 +255,15 @@ Reset button located in Settings.
 - The Hide Timer setting persists across page refresh.
 - Reset does not change the Hide Timer setting.
 
+## Layout & Positioning
+- The Timer and Play/Pause control appear on the same row as the Guess Counter.
+- When the Timer is visible:
+  - The Play/Pause control and Timer display are aligned to the left.
+  - The Guess Counter is aligned to the right.
+- When the Timer is hidden:
+  - The Guess Counter is centered horizontally.
+- The Timer and Guess Counter must not overlap at any viewport width.
+
 ## Persistence Across Refresh
 - Timer state (Stopped, Paused, Locked) and elapsed time persist across refresh.
 - If a Running timer is refreshed, it restores in Paused state.
