@@ -260,6 +260,12 @@ button:disabled{
   animation:fall linear forwards;
 }
 
+.completion-time{
+  margin:12px 0 20px 0;
+  font-size:18px;
+  font-weight:600;
+}
+
 @keyframes fall{
   to{
     transform:translateY(110vh) rotate(720deg);

@@ -80,6 +80,18 @@ function checkCompletion(){
       fadeOutMusic();
       playCelebration();
 
+      const timeEl = document.getElementById("completionTime");
+
+      const row = document.querySelector(".game-info-row");
+      const timerIsHidden = row.classList.contains("timer-hidden");
+
+      if(!timerIsHidden){
+        timeEl.textContent = `Time: ${timer.getTime()}`;
+        timeEl.classList.remove("hidden");
+      } else {
+        timeEl.classList.add("hidden");
+      }
+
       document.getElementById("celebration").style.display = "flex";
     }
   }
@@ -91,6 +103,19 @@ function giveUp(){
 
   gameFinished = true;
   timer.lock();
+
+  const timeEl = document.getElementById("completionTime");
+
+  const row = document.querySelector(".game-info-row");
+  const timerIsHidden = row.classList.contains("timer-hidden");
+
+  if(!timerIsHidden){
+    timeEl.textContent = `Time: ${timer.getTime()}`;
+    timeEl.classList.remove("hidden");
+  } else {
+    timeEl.classList.add("hidden");
+  }
+
   fadeOutMusic();
 
   let firstMissed = null;
