@@ -229,6 +229,16 @@ button:disabled{
   transform:translateY(0);
 }
 
+.sheet-actions{
+  display:flex;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.sheet-actions button{
+  flex:1;
+}
+
 .toggle {
   display: flex;
   align-items: center;

@@ -10,7 +10,7 @@ function buildCategoryUI(){
     const div = document.createElement("div");
     div.className = "toggle";
     div.innerHTML = `
-      <input type="checkbox" data-cat="${cat}" checked>
+      <input type="checkbox" data-cat="${cat}" ${activeCategories.has(cat) ? "checked" : ""}>
       <span>${cat}</span>
     `;
     container.appendChild(div);
@@ -53,56 +53,38 @@ function attachFilterListeners(){
 
     saveFilters();
 
-    syncSelectAllState();
     applyFilter();
   });
 
-  /* Select All */
-  const selectAll = document.getElementById("selectAll");
-  selectAll.addEventListener("change", e=>{
-    if(e.target.checked){
+  /* Select All Button */
+const selectAllBtn = document.getElementById("selectAllBtn");
+if(selectAllBtn){
+  selectAllBtn.addEventListener("click", ()=>{
+    activeCategories.clear();
+    categories.forEach(c=>activeCategories.add(c));
 
-      activeCategories.clear();
-      categories.forEach(c=>activeCategories.add(c));
-
-      document.querySelectorAll("#categoryContainer input")
-        .forEach(cb=>cb.checked = true);
-
-      document.getElementById("unselectAll").checked = false;
-    }
-
-    saveFilters();
+    document.querySelectorAll("#categoryContainer input[data-cat]")
+      .forEach(cb=>cb.checked = true);
 
     applyFilter();
-  });
-
-  /* Unselect All */
-  const unselectAll = document.getElementById("unselectAll");
-  unselectAll.addEventListener("change", e=>{
-    if(e.target.checked){
-
-      activeCategories.clear();
-
-      document.querySelectorAll("#categoryContainer input")
-        .forEach(cb=>cb.checked = false);
-
-      document.getElementById("selectAll").checked = false;
-
-      // Uncheck itself (as requested)
-      e.target.checked = false;
-    }
-
     saveFilters();
-
-    applyFilter();
   });
 }
 
-/* ---------- Sync Select All State ---------- */
+/* Unselect All Button */
+const unselectAllBtn = document.getElementById("unselectAllBtn");
+if(unselectAllBtn){
+  unselectAllBtn.addEventListener("click", ()=>{
+    activeCategories.clear();
 
-function syncSelectAllState(){
-  const allSelected = categories.every(c=>activeCategories.has(c));
-  document.getElementById("selectAll").checked = allSelected;
+    document.querySelectorAll("#categoryContainer input[data-cat]")
+      .forEach(cb=>cb.checked = false);
+
+    applyFilter();
+    saveFilters();
+  });
+}
+  
 }
 
 /* ---------- Filter Matching ---------- */
