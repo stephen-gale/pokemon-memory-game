@@ -113,8 +113,6 @@ No feature may be removed unless explicitly deleted from this contract.
 ## Controls
 - Select All
 - Unselect All
-- Select All auto-checks when all individual boxes checked
-- Unselect All clears everything
 
 ---
 
@@ -178,6 +176,7 @@ Reset button located in Settings.
 - Restore music state correctly
 - Preserve Cry toggle state
 - Preserve Music toggle state
+- Preserve Timer toggle state
 
 ---
 
