@@ -5,7 +5,7 @@ No feature may be removed unless explicitly deleted from this contract.
 
 ---
 
-# 1️⃣ Core Gameplay
+# 1. Core Gameplay
 
 ## Structure
 - 151 rows (Generation 1 only)
@@ -32,7 +32,7 @@ No feature may be removed unless explicitly deleted from this contract.
 
 ---
 
-# 2️⃣ Counter System
+# 2. Counter System
 
 - Format: `X / Y`
 - `Y` = number of Pokémon currently visible under active filters
@@ -46,7 +46,7 @@ No feature may be removed unless explicitly deleted from this contract.
 
 ---
 
-# 3️⃣ Audio System
+# 3. Audio System
 
 ## Pokémon Cries
 - Plays on correct guess only if the Pokémon is currently visible under active filters
@@ -70,7 +70,7 @@ No feature may be removed unless explicitly deleted from this contract.
 
 ---
 
-# 4️⃣ Filters System (Pokémon Select Drawer)
+# 4. Filters System (Pokémon Select Drawer)
 
 ## Drawer Behaviour
 - Opens from Settings
@@ -118,7 +118,7 @@ No feature may be removed unless explicitly deleted from this contract.
 
 ---
 
-# 5️⃣ Give Up System
+# 5. Give Up System
 
 - Located in Settings
 - Confirm modal appears before executing
@@ -133,7 +133,7 @@ No feature may be removed unless explicitly deleted from this contract.
 
 ---
 
-# 6️⃣ Show Only Missed
+# 6. Show Only Missed
 
 - Button appears only after Give Up
 - Toggle behaviour:
@@ -145,7 +145,7 @@ No feature may be removed unless explicitly deleted from this contract.
 
 ---
 
-# 7️⃣ Completion System
+# 7. Completion System
 
 Triggered when all visible Pokémon are guessed.
 
@@ -161,7 +161,7 @@ Triggered when all visible Pokémon are guessed.
 
 ---
 
-# 8️⃣ Reset System
+# 8. Reset System
 
 Reset button located in Settings.
 
@@ -181,7 +181,7 @@ Reset button located in Settings.
 
 ---
 
-# 9️⃣ Auto-Save System
+# 9. Auto-Save System
 
 - Save guessed Pokémon IDs
 - Restore progress on reload
@@ -190,7 +190,79 @@ Reset button located in Settings.
 
 ---
 
-# 🔟 UI Integrity Requirements
+# 10. Timer System
+
+## Display & Format
+- A stopwatch timer is available in the header.
+- Timer display shows elapsed minutes and seconds in `MM:SS` format.
+- Timer starts at `00:00`.
+- Timer display appears to the left of the Play/Pause control.
+
+## Timer Limits
+- Timer counts upward.
+- Timer caps at **99:59**.
+- Upon reaching 99:59:
+  - Timer stops.
+  - Play/Pause control shows the Pause state.
+  - Timer control becomes disabled.
+  - Elapsed time remains frozen at 99:59.
+
+## Start Behaviour
+- Timer starts when:
+  - The Play button is pressed, or
+  - Any guess is entered (regardless of correctness or visibility).
+- Timer transitions from Stopped or Paused to Running.
+- Timer does not start if already Locked (after completion, give up, or cap).
+
+## Pause Behaviour
+- Timer pauses when:
+  - Play/Pause control is pressed while running,
+  - The Settings overlay is opened,
+  - The browser tab or window loses visibility (e.g., tab switch, minimise, device lock).
+- Timer remains paused until Play is pressed or next guess is entered.
+- Pausing does not affect guessing functionality.
+
+## Reset Behaviour
+- Reset (in Settings) resets the timer to `00:00`.
+- Timer returns to Stopped state.
+- Play/Pause control returns to the Play state and is enabled.
+- Reset does not change the Hide Timer setting.
+- Reset does not affect audio toggle settings.
+
+## Completion & Give Up Behaviour
+- Upon guessing all visible Pokémon (completion):
+  - Timer pauses.
+  - Timer enters a locked state.
+  - Play/Pause control shows Pause and is disabled.
+  - Elapsed time is shown on the Completion screen if the timer is visible.
+- Upon executing Give Up:
+  - Timer pauses.
+  - Timer enters a locked state.
+  - Play/Pause control shows Pause and is disabled.
+  - Elapsed time is shown on the Completion screen if the timer is visible.
+
+## Filter & Settings Interaction
+- Changing filters mid-run does not pause or reset the timer.
+- The Settings menu opening causes the timer to pause.
+- The browser visibility change (tab/window unfocused) causes the timer to pause.
+
+## Hide Timer Behaviour
+- Settings includes a “Hide Timer” option.
+- Hiding the timer conceals the display and Play/Pause control.
+- Hiding does not stop or reset the timer; it continues counting in the background.
+- Completion screen does not display elapsed time when hidden.
+- If the timer is re-shown before or after completion, current elapsed time is displayed.
+- The Hide Timer setting persists across page refresh.
+- Reset does not change the Hide Timer setting.
+
+## Persistence Across Refresh
+- Timer state (Stopped, Paused, Locked) and elapsed time persist across refresh.
+- If a Running timer is refreshed, it restores in Paused state.
+- Timer does not accumulate time while the page is not active (e.g., hidden, refreshed, or unfocused).
+
+---
+
+# 11. UI Integrity Requirements
 
 - Settings overlay blocks background interaction
 - Bottom sheet blocks background interaction
@@ -202,7 +274,7 @@ Reset button located in Settings.
 
 ---
 
-# Version Control Rule
+# 12. Version Control Rule
 
 Any new feature must:
 1. Be added to this CONTRACT.md file
