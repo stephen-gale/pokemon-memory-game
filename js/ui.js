@@ -100,4 +100,11 @@ document.getElementById("timerBtn").onclick = timer.toggle;
     }
   });
 
+  /* ---- Timer Toggle ---- */
+  document.getElementById("hideTimerToggle")
+  .addEventListener("change", (e)=>{
+    const hide = e.target.checked;
+    timer.setVisibility(!hide);
+  });
+
 }

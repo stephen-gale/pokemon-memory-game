@@ -2,6 +2,8 @@
 
 const TIMER_SAVE_KEY = "gen1-memory-timer";
 
+const TIMER_VISIBILITY_KEY = "gen1-memory-timer-visibility";
+
 const MAX_SECONDS = (99 * 60) + 59;
 
 let elapsedSeconds = 0;
@@ -166,17 +168,33 @@ function setTimerVisibility(visible){
     row.classList.add("timer-hidden");
   }
 
-  // Do not stop timer — visual only
+  // Persist preference
+  localStorage.setItem(
+    TIMER_VISIBILITY_KEY,
+    JSON.stringify(visible)
+  );
 }
 
 /* ---------- Public API ---------- */
 
 window.timer = {
-  init(){
-    loadTimer();
-    updateDisplay();
-    updateTimerButton();
-  },
+init(){
+  loadTimer();
+
+  const savedVisibility =
+    JSON.parse(localStorage.getItem(TIMER_VISIBILITY_KEY) || "true");
+
+  setTimerVisibility(savedVisibility);
+
+  // Sync checkbox if it exists
+  const checkbox = document.getElementById("hideTimerToggle");
+  if(checkbox){
+    checkbox.checked = !savedVisibility;
+  }
+
+  updateDisplay();
+  updateTimerButton();
+},
   toggle: toggleTimer,
   handleGuess: handleTimerGuess,
   pauseForSettings,
