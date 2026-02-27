@@ -12,6 +12,7 @@ document.getElementById("guessInput")
   const settingsOverlay = document.getElementById("settingsOverlay");
 
   document.getElementById("settingsBtn").onclick=()=>{
+    timer.pauseForSettings();
     settingsOverlay.style.display="flex";
     document.body.style.overflow="hidden";
   };
@@ -56,6 +57,9 @@ document.getElementById("guessInput")
 
   /* ---- Reset ---- */
   document.getElementById("restartBtn").onclick=resetGame;
+
+/* ---- Play/Pause Control ---- */
+document.getElementById("timerBtn").onclick = timer.toggle;
 
   /* ---- Show Only Missed ---- */
   document.getElementById("missedBtn").onclick=()=>{

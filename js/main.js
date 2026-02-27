@@ -47,6 +47,8 @@ async function init(){
  applyFilter();
  initUI();
 
+ timer.init();
+
  document.getElementById("loading").classList.add("hidden");
 }
 

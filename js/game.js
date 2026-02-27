@@ -24,6 +24,8 @@ function handleGuess(inputEl){
 
   if(gameFinished) return;
 
+  timer.handleGuess();
+
   const raw = inputEl.value;
 
   const guess = raw.toLowerCase().trim()
@@ -73,6 +75,8 @@ function checkCompletion(){
     if(!gameFinished){
       gameFinished = true;
 
+      timer.lock();
+
       fadeOutMusic();
       playCelebration();
 
@@ -86,6 +90,7 @@ function checkCompletion(){
 function giveUp(){
 
   gameFinished = true;
+  timer.lock();
   fadeOutMusic();
 
   let firstMissed = null;
@@ -121,6 +126,8 @@ function resetGame(){
   guessedGlobal.clear();
   saveProgress();
   localStorage.removeItem(SAVE_KEY);
+
+  timer.reset();
 
   // CLEAR SAVED FILTERS
   localStorage.removeItem("gen1-memory-filters");
