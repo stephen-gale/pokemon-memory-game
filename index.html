@@ -13,7 +13,12 @@
 
 <header>
   <h1>Pokémon Memory Game</h1>
-  <button id="settingsBtn">⚙️</button>
+  <div class="header-actions">
+    <button id="timerVisibilityBtn" class="icon-btn" aria-label="Hide timer">🚫</button>
+    <button id="darkModeBtn" class="icon-btn" aria-label="Toggle dark mode">🌙</button>
+    <button id="muteBtn" class="icon-btn" aria-label="Mute audio">🔇</button>
+    <button id="settingsBtn" class="icon-btn" aria-label="Open settings">⚙️</button>
+  </div>
 </header>
 
 <div class="game-info-row">
@@ -22,12 +27,18 @@
     <span id="timerDisplay">00:00</span>
   </div>
 
-  <div id="counter">0 / 151</div>
+  <div id="counter">0 / 0 (0%)</div>
 </div>
 
-<input id="guessInput" placeholder="Who's that Pokémon?">
+<div class="guess-row">
+  <input id="guessInput" placeholder="Who's that Pokémon?">
+  <button id="giveUpBtn" type="button">Give Up</button>
+</div>
 
-<button id="missedBtn" class="hidden">Show Only Missed</button>
+<div id="postGiveUpRow" class="hidden">
+  <button id="missedBtn" class="hidden">Show Only Missed</button>
+  <button id="giveUpResetBtn" class="hidden" type="button">Reset</button>
+</div>
 
 <div id="list"></div>
 <div id="emptyMessage" class="hidden">No Pokémon selected</div>
@@ -50,22 +61,11 @@
     <h3>Settings</h3>
 
     <div class="toggle">
-      <input type="checkbox" id="cryToggle">
-      <span>Pokémon Cries</span>
-    </div>
-
-    <div class="toggle">
-      <input type="checkbox" id="musicToggle">
-      <span>Background Music</span>
-    </div>
-
-    <div class="toggle">
-      <input type="checkbox" id="hideTimerToggle">
-      <span>Hide Timer</span>
+      <input type="checkbox" id="misspellingToggle">
+      <span>Mispelling acceptance</span>
     </div>
 
     <button id="openSelect">Pokémon Select</button>
-    <button id="giveUpBtn">Give Up</button>
     <button id="restartBtn">Reset</button>
     <button id="closeSettings">Close</button>
   </div>
@@ -81,9 +81,21 @@
     <button id="unselectAllBtn" type="button">Unselect All</button>
   </div>
 
+  <button id="generationAccordionBtn" class="filter-section-title accordion-btn" type="button" aria-expanded="true">
+    Generation
+  </button>
+  <div id="generationSection" class="accordion-section">
+    <div id="generationContainer"></div>
+  </div>
+
   <div class="filter-divider"></div>
 
-  <div id="categoryContainer"></div>
+  <button id="categoriesAccordionBtn" class="filter-section-title accordion-btn" type="button" aria-expanded="true">
+    Categories
+  </button>
+  <div id="categoriesSection" class="accordion-section">
+    <div id="categoryContainer"></div>
+  </div>
 
   <button id="doneBtn">Done</button>
 </div>

@@ -186,12 +186,6 @@ init(){
 
   setTimerVisibility(savedVisibility);
 
-  // Sync checkbox if it exists
-  const checkbox = document.getElementById("hideTimerToggle");
-  if(checkbox){
-    checkbox.checked = !savedVisibility;
-  }
-
   updateDisplay();
   updateTimerButton();
 },

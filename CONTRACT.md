@@ -1,328 +1,302 @@
-# Pokémon Memory Game – Core Contract v1.0
-
-This document defines the authoritative feature set for the Pokémon Memory Game.  
-No feature may be removed unless explicitly deleted from this contract.
+# Pokémon Memory Game — CONTRACT v3.1
 
 ---
 
-# 1. Core Gameplay
+## 1. Core Gameplay
 
-## Structure
-- 151 rows (Generation 1 only)
-- Fixed Pokédex order (1–151)
-- One row per Pokémon
+- The game displays Pokémon from selected generations.
+- Supported generations:
+  - Gen 1 (National Dex #1–151)
+  - Gen 2 (National Dex #152–251)
+  - Gen 3 (National Dex #252–386)
+  - Gen 4 (National Dex #387–493)
+  - Gen 5 (National Dex #494–649)
+  - Gen 6 (National Dex #650–721)
+  - Gen 7 (National Dex #722–809)
+  - Gen 8 (National Dex #810–905)
+  - Gen 9 (National Dex #906–1025)
+- Pokémon appear in National Pokédex order.
+- One row is rendered per Pokémon.
+- The total number of Pokémon is dynamic and depends on selected generations.
 
-## Guess Input
-- Live input (no Enter required)
-- Accepts trailing spaces
-- Accepts missing special characters (e.g. Farfetch’d → Farfetchd)
-- Case insensitive
-- No duplicate guesses allowed
-- Input clears after correct guess
+### Guessing Behavior
 
-## Correct Guess Behaviour
-- Pokémon name revealed in Title Case
-- Gen 1 Red/Blue sprite displayed
-- Pokémon cry plays
-- No overlapping cries (interrupt previous cry)
-- Row scrolls smoothly to center
-- Row flashes/highlights briefly
-- Counter updates immediately
-- Progress auto-saves
+- Guess input is live (no Enter required).
+- Input is case-insensitive.
+- Minor formatting differences are tolerated (e.g., Farfetch’d → Farfetchd).
+- Minor misspellings are accepted when the intended Pokémon is unambiguous.
+- Settings include a “Mispelling acceptance” toggle to disable typo matching.
+- The “Mispelling acceptance” toggle persists across resets.
+- Duplicate guesses are ignored.
+- Input clears on correct guess.
+
+### Theme and Settings Toggles
+
+- Header includes a timer visibility icon button next to Dark mode and Settings.
+- When timer is shown, the icon is 🚫 (hide action).
+- When timer is hidden, the icon is a clock (show action).
+- Timer visibility persists across refresh and reset.
+- Header includes a dark mode icon button next to the Settings button.
+- In light mode, the icon is a moon (switch to dark mode).
+- In dark mode, the icon is a sun (switch to light mode).
+- Dark mode persists across refresh and reset.
+- Header includes an audio mute icon button next to Dark mode and Settings.
+- When audio is currently enabled, the icon is 🔇 (mute action).
+- When audio is currently muted, the icon is 🔊 (unmute action).
+- The audio mute state persists across refresh and reset.
+- Header icon buttons use neutral grey styling (not red primary action styling).
+- All checkboxes in Settings are displayed as toggle switches.
+
+### On Correct Guess
+
+- Pokémon name reveals in Title Case.
+- A generation-appropriate game sprite is displayed.
+- The Pokémon’s cry plays.
+  - Any previously playing cry stops first.
+  - Cries respect the global audio mute state.
+- The row scrolls into view.
+- The row briefly highlights.
+- The counter updates immediately.
 
 ---
 
-# 2. Counter System
+## 2. Counter System
 
-- Format: `X / Y`
-- `Y` = number of Pokémon currently visible under active filters
-- `X` = number guessed among visible Pokémon
-- Counter recalculates instantly on:
-  - Guess
-  - Filter change
-  - Reset
-  - Give Up
-- Must never show incorrect totals (no "149 bug")
+- Counter displays as: `X / Y`
+
+Where:
+- `Y` = total number of Pokémon currently visible based on generation and category filters.
+- `X` = number of correctly guessed Pokémon among those visible.
+
+### Counter Rules
+
+- The counter recalculates immediately when:
+  - A correct guess is made
+  - Filters change
+  - Generation selection changes
+  - Reset is triggered
+  - Give Up is triggered
+- The counter displays a guessed percentage next to `X / Y`.
+- The counter must never display incorrect totals.
+- No hardcoded totals (e.g., 151).
+- Reset sets counter to `0 / totalVisiblePokemon`.
 
 ---
 
-# 3. Audio System
+## 3. Audio System
 
-## Pokémon Cries
-- Plays on correct guess only if the Pokémon is currently visible under active filters
-- Stops previous cry if a new guess is entered
-- Disabled if Cry toggle is off
-- Toggle state persists across sessions
+### Pokémon Cries
 
-## Background Music
-- 8-bit looping track
-- OFF by default
-- Starts on first user interaction
-- Toggle state persists across sessions
+- Play only on correct guesses for visible Pokémon.
+- Disabled when global audio mute is enabled.
+- Only one cry may play at a time.
+
+### Background Music
+
+- 8-bit loop.
+- Starts only after first user interaction (unless audio is muted).
+- Obeys global audio mute state.
 - Fades out on:
   - Give Up
   - Completion
-- Resumes after closing celebration overlay (if enabled)
 
-## Celebration Sound
-- Plays once on completion
-- Does not overlap incorrectly with background music
+### Celebration Sound
 
----
+- Plays once on completion.
+- Must not conflict with background music.
+- Stops immediately if the celebration modal is closed.
 
-# 4. Filters System (Pokémon Select Drawer)
+### Global Audio Mute
 
-## Drawer Behaviour
-- Opens from Settings
-- Slides up from bottom
-- Tap outside closes
-- Swipe down closes
-- Locks background scroll while open
-- Tapping outside the Pokémon Select sheet closes the sheet (same as pressing Done).
-
-## Categories
-- Starters (full evolution lines)
-(all evolution forms of the three Gen I starter Pokémon)
-- Legendary and Mythical
-- Normal
-- Fire
-- Water
-- Electric
-- Grass
-- Ice
-- Fighting
-- Poison
-- Ground
-- Flying
-- Psychic
-- Bug
-- Rock
-- Ghost
-- Dragon
-
-## Filter Logic
-- OR logic
-- Pokémon appears once even if matches multiple categories
-- Accept guess even if Pokémon currently hidden
-- Filter changes apply instantly
-- Completion recalculated instantly
-- If all categories selected → show all 151 (no logic edge cases)
-- Active category selections persist across page refresh via localStorage.
-- Filter selections only reset when the Reset option in Settings is pressed.
-
-## Controls
-- Select All
-- Unselect All
+- A single header mute toggle controls all audio.
+- Muting must silence:
+  - Pokémon cries
+  - Background music
+  - Celebration sound
+- Mute state persists across sessions and resets.
 
 ---
 
-# 5. Give Up System
+## 4. Filters System
 
-- Located in Settings
-- Confirm modal appears before executing
-- On confirm:
-  - Reveal all unguessed Pokémon
-  - Names displayed in red
-  - Sprites grayscale
-  - Cry does NOT play
-  - Music fades out
-  - Show "Show Only Missed" button
-  - Auto-scroll to first missed Pokémon
+The Pokémon Select drawer allows filtering of visible Pokémon.
 
----
+Filter state persists across refresh.
 
-# 6. Show Only Missed
+### 4.1 Generation Filters
 
-- Button appears only after Give Up
-- Toggle behaviour:
-  - First press → show only missed Pokémon
-  - Second press → show all
-- Auto-scroll to first missed when enabled
-- Does NOT modify filter state
-- Reset hides the button
+- Generation selection appears as a dedicated section within the Pokémon Select drawer.
+- The generation section must be visually separated from other filter categories (e.g., divider or section header).
+- Available options:
+  - Gen 1 through Gen 9
+- All generations are selected by default.
+- The user may temporarily uncheck all generations.
+- The “Done” button is disabled if no generation is selected.
+- Generation selection persists across refresh.
 
----
+### 4.2 Category Filters
 
-# 7. Completion System
+- Includes types, starter lines, legendary groupings, etc.
+- Includes Stage 1, Stage 2, and Stage 3 filters.
+- Multiple categories may be selected simultaneously.
+- Category filter logic uses OR behavior.
 
-Triggered when all visible Pokémon are guessed.
+### 4.3 Filter Logic Definition
 
-## Behaviour
-- Fade out music
-- Play celebration sound
-- Show celebration overlay
-- Prevent further guessing
-- Closing overlay resumes music (if enabled)
-- If filters change while complete:
-  - Exit completion state
-  - Recalculate counter
+A Pokémon is visible if:
 
----
+- It matches at least one selected generation  
+AND  
+- It matches at least one selected category  
+  OR no category filters are selected
 
-# 8. Reset System
+Generation acts as a top-level gate and is not merged into OR category logic.
 
-Reset button located in Settings.
+### 4.4 Select All / Unselect All
 
-## Must:
-- Clear guessed Pokémon
-- Clear red styling
-- Clear grayscale styling
-- Remove sprite `src` attributes (prevent broken images)
-- Restore all filters
-- Hide "Show Only Missed" button
-- Reset counter to `0 / 151`
-- Close all overlays
-- Clear input
-- Restore music state correctly
-- Preserve Cry toggle state
-- Preserve Music toggle state
-- Preserve Timer toggle state
+- Behaves consistently with existing filter logic.
+- Select All and Unselect All apply to both generation and category checkboxes.
+- Must not allow the Done button to close the drawer if no generations are selected.
+
+### 4.5 Filter Drawer Sections
+
+- Generation and Categories sections use accordion-style hide/show headers.
+- Both sections are expanded by default.
+- Collapsing sections does not change selected filters.
 
 ---
 
-# 9. Auto-Save System
+## 5. Give Up System
 
-- Save guessed Pokémon IDs
-- Restore progress on reload
-- Does NOT auto-trigger completion on load
-- Does NOT persist Give Up state
+- Accessible from a button adjacent to the guess input.
+- Requires confirmation modal.
 
----
+### On Confirm
 
-# 10. Timer System
-
-## Overview
-An optional stopwatch Timer allows players to time their run.
-
-The Timer counts upward and integrates with guessing, completion, filters, reset, and visibility behavior.
-
----
-
-## Display & Layout
-
-- The Timer and Play/Pause control appear on the same row as the Guess Counter.
-- When the Timer is visible:
-  - The Play/Pause control and Timer display are aligned to the left edge.
-  - The Guess Counter is aligned to the right edge.
-- When the Timer is hidden:
-  - The Guess Counter is centered horizontally.
-- The Timer and Guess Counter must not overlap at any viewport width.
-- Timer format is `MM:SS`.
-- Timer starts at `00:00`.
+- Reveal all unguessed visible Pokémon.
+- Apply “missed” state styling:
+  - Red text
+  - Grayscale sprite
+- Music fades out.
+- Cries do not play.
+- Show a post-Give Up action row:
+  - “Show Only Missed” button on the left
+  - “Reset” button on the right
+- Auto-scroll to first missed Pokémon.
+- Does not modify filter or generation selections.
 
 ---
 
-## Timer Limits
+## 6. Show Only Missed
 
-- Timer counts upward.
-- Timer caps at **99:59**.
-- Upon reaching 99:59:
-  - Timer stops.
-  - Play/Pause control displays Pause state.
-  - Play/Pause control becomes disabled.
-  - Time remains frozen at 99:59.
-
----
-
-## Start Behaviour
-
-The Timer starts when:
-- The Play button is pressed, or
-- Any guess is entered (correct or incorrect, visible or filtered).
-
-The Timer:
-- Transitions from Stopped or Paused to Running.
-- Does not restart if in Locked state.
+- Only appears after Give Up.
+- Toggles between:
+  - Showing only missed Pokémon
+  - Showing all visible Pokémon
+- Does not modify filters or generation selections.
+- Scrolls to first missed Pokémon when toggled on.
+- Hidden when Reset is triggered.
 
 ---
 
-## Pause Behaviour
+## 7. Completion State
 
-The Timer pauses when:
-- Play/Pause control is pressed while running.
-- The Settings overlay is opened.
-- The browser tab or window loses visibility (tab switch, minimize, device lock).
+Completion occurs when:
 
-When visibility returns:
-- The Timer remains paused.
-- It resumes only when Play is pressed or a guess is entered.
+All currently visible Pokémon are guessed.
 
-Pausing does not disable guessing.
+Visible Pokémon are determined by active generation and category filters.
 
----
+### On Completion
 
-## Completion & Give Up Behaviour
+- Music fades out.
+- Celebration sound plays once.
+- Celebration overlay appears.
+- Further guessing is disabled.
 
-Upon completion (all visible Pokémon guessed):
-- Timer pauses.
-- Timer enters Locked state.
-- Play/Pause control displays Pause and is disabled.
-- Elapsed time appears on the Completion screen if the Timer is visible.
+### Filter or Generation Changes During Completion
 
-Upon Give Up:
-- Timer pauses.
-- Timer enters Locked state.
-- Play/Pause control displays Pause and is disabled.
-- Elapsed time appears on the Completion screen if the Timer is visible.
+- Completion state exits automatically if newly visible Pokémon are unguessed.
+- Counter recalculates immediately.
+- Guessing re-enables if appropriate.
+
+Completion is always tied to currently visible Pokémon, not total stored guesses.
 
 ---
 
-## Filter Interaction
+## 8. Reset System
 
-- Changing filters does not pause or reset the Timer.
-- Timer continues running while filters are adjusted.
+Reset must:
 
----
-
-## Hide Timer Behaviour
-
-- Settings include a “Hide Timer” option.
-- When enabled:
-  - Timer display and Play/Pause control are hidden.
-  - Timer continues functioning in the background.
-  - Completion screen does not display elapsed time.
-- When disabled:
-  - Timer display reappears.
-  - Current elapsed time is shown.
-- Hide Timer setting persists across refresh.
-- Reset does not change the Hide Timer setting.
+- Clear all guessed Pokémon.
+- Remove all revealed and missed styling.
+- Restore all supported generations selected.
+- Restore all category filters.
+- Recalculate visible Pokémon.
+- Reset counter to `0 / totalVisiblePokemon`.
+- Hide Show Only Missed button.
+- Close overlays.
+- Clear guess input.
+- Preserve persisted settings state (audio mute, dark mode, timer visibility, misspelling acceptance).
+- Leave no modal or transient state active.
 
 ---
 
-## Reset Behaviour
+## 9. Auto-Save / Persistence
 
-Reset:
-- Resets Timer to `00:00`.
-- Returns Timer to Stopped state.
-- Re-enables Play/Pause control.
-- Does not change Hide Timer setting.
-- Does not change Audio settings.
+The game persists:
 
----
+- Guessed Pokémon IDs.
+- Generation filter selection.
+- Category filter selection.
+- Global audio mute state.
+- Dark mode state.
+- Timer visibility state.
+- Mispelling acceptance state.
 
-## Persistence
+### On Reload
 
-- Timer state (Stopped, Paused, Locked) and elapsed time persist across refresh.
-- If refreshed while Running, Timer restores in Paused state.
-- Timer does not accumulate time while page is not visible.
-
----
-
-# 11. UI Integrity Requirements
-
-- Settings overlay blocks background interaction
-- Bottom sheet blocks background interaction
-- No console errors
-- No loading freeze
-- No broken sprites after reset
-- No incorrect counter states
-- No accidental feature regressions
+- Guessed Pokémon restore visually.
+- Filters and generation selections restore.
+- Theme, timer visibility, and audio mute preferences restore.
+- The game does not auto-trigger completion on load.
+- Give Up state does not persist.
 
 ---
 
-# 12. Version Control Rule
+## 10. Data Architecture Requirements
+
+- Pokémon data must include an explicit `generation` property.
+- Generation must not be inferred from ID ranges.
+- All total counts must derive from the current dataset.
+- No hardcoded Pokémon totals are permitted anywhere in the codebase.
+
+Example data structure:
+
+- id: 152  
+- name: Chikorita  
+- generation: 2  
+- types: grass  
+
+---
+
+## 11. UI Integrity Rules
+
+- Settings and filter drawer block background interaction.
+- No click-through behavior.
+- Modal-style surfaces (settings panel and Pokémon Select drawer) use 90% viewport height for larger content capacity.
+- No console errors.
+- No frozen loading states.
+- No broken sprites after reset.
+- Counters and filters must always reflect correct visible totals.
+- The system must scale correctly if additional generations are added in future.
+
+---
+
+## 12. Version Control Rule
 
 Any new feature must:
-1. Be added to this CONTRACT.md file
-2. Be implemented in code
-3. Be verified against this contract before release
+
+1. Be added to this CONTRACT.md.
+2. Be implemented in code.
+3. Be verified against the contract before release.

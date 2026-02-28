@@ -5,13 +5,16 @@ const CELEBRATION_FILE = "celebration.mp3";
 
 let bgMusic = null;
 let currentCry = null;
+let currentCelebration = null;
 let musicStarted = false;
 
 function startMusic(){
- if(!musicEnabled || musicStarted) return;
- bgMusic = new Audio(MUSIC_FILE);
- bgMusic.loop = true;
- bgMusic.volume = 0.4;
+ if(audioMuted || musicStarted) return;
+ if(!bgMusic){
+   bgMusic = new Audio(MUSIC_FILE);
+   bgMusic.loop = true;
+   bgMusic.volume = 0.4;
+ }
  bgMusic.play().catch(()=>{});
  musicStarted = true;
 }
@@ -25,7 +28,7 @@ function stopMusic(){
 }
 
 function fadeOutMusic(){
- if(!bgMusic) return;
+ if(!bgMusic || audioMuted) return;
  let vol = bgMusic.volume;
  const fade = setInterval(()=>{
    vol -= 0.05;
@@ -39,7 +42,7 @@ function fadeOutMusic(){
 }
 
 function playCry(url){
- if(!criesEnabled || gameFinished || !url) return;
+ if(audioMuted || gameFinished || !url) return;
  if(currentCry){
    currentCry.pause();
    currentCry.currentTime = 0;
@@ -49,5 +52,36 @@ function playCry(url){
 }
 
 function playCelebration(){
- new Audio(CELEBRATION_FILE).play().catch(()=>{});
+ if(audioMuted) return;
+ stopCelebration();
+ currentCelebration = new Audio(CELEBRATION_FILE);
+ currentCelebration.play().catch(()=>{});
+}
+
+function stopCelebration(){
+ if(currentCelebration){
+   currentCelebration.pause();
+   currentCelebration.currentTime = 0;
+   currentCelebration = null;
+ }
+}
+
+function setAudioMuted(muted){
+  audioMuted = Boolean(muted);
+  localStorage.setItem(AUDIO_MUTED_SAVE_KEY, audioMuted);
+
+  if(audioMuted){
+    stopMusic();
+    if(currentCry){
+      currentCry.pause();
+      currentCry.currentTime = 0;
+      currentCry = null;
+    }
+    stopCelebration();
+    return;
+  }
+
+  if(!gameFinished){
+    startMusic();
+  }
 }
