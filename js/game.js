@@ -334,7 +334,7 @@ function resetGame(){
   stopCelebration();
   document.getElementById("celebration").style.display = "none";
   document.getElementById("confirmOverlay").style.display = "none";
-  document.getElementById("settingsOverlay").style.display = "none";
+  document.getElementById("menuOverlay").style.display = "none";
   document.getElementById("sheetOverlay").style.display = "none";
   document.getElementById("pokemonSheet").classList.remove("open");
   document.body.style.overflow = "";

@@ -1,4 +1,4 @@
-# Pokémon Memory Game — CONTRACT v3.1
+# Pokémon Memory Game — CONTRACT v3.0
 
 ---
 
@@ -16,6 +16,8 @@
   - Gen 8 (National Dex #810–905)
   - Gen 9 (National Dex #906–1025)
 - Pokémon appear in National Pokédex order.
+- By default, Pokémon appear in National Pokédex order.
+- Menu include an “Alphabetical ordering” toggle that changes list order to alphabetical by Pokémon name.I do
 - One row is rendered per Pokémon.
 - The total number of Pokémon is dynamic and depends on selected generations.
 
@@ -25,27 +27,24 @@
 - Input is case-insensitive.
 - Minor formatting differences are tolerated (e.g., Farfetch’d → Farfetchd).
 - Minor misspellings are accepted when the intended Pokémon is unambiguous.
-- Settings include a “Mispelling acceptance” toggle to disable typo matching.
+- Menu include a “Mispelling acceptance” toggle to disable typo matching.
 - The “Mispelling acceptance” toggle persists across resets.
 - Duplicate guesses are ignored.
 - Input clears on correct guess.
 
-### Theme and Settings Toggles
+### Theme and Menu Toggles
 
-- Header includes a timer visibility icon button next to Dark mode and Settings.
-- When timer is shown, the icon is 🚫 (hide action).
+- Header includes a timer visibility icon button next to Dark mode and Menu.
+- When timer is shown, the icon is a clock with a line through it (hide action).
 - When timer is hidden, the icon is a clock (show action).
 - Timer visibility persists across refresh and reset.
-- Header includes a dark mode icon button next to the Settings button.
+- Header includes a dark mode icon button next to the Menu button.
 - In light mode, the icon is a moon (switch to dark mode).
 - In dark mode, the icon is a sun (switch to light mode).
 - Dark mode persists across refresh and reset.
-- Header includes an audio mute icon button next to Dark mode and Settings.
-- When audio is currently enabled, the icon is 🔇 (mute action).
-- When audio is currently muted, the icon is 🔊 (unmute action).
-- The audio mute state persists across refresh and reset.
-- Header icon buttons use neutral grey styling (not red primary action styling).
-- All checkboxes in Settings are displayed as toggle switches.
+- Menu include an “Alphabetical ordering” toggle.
+- Alphabetical ordering persists across refresh and reset.
+- All checkboxes in Menu are displayed as toggle switches.
 
 ### On Correct Guess
 
@@ -53,7 +52,7 @@
 - A generation-appropriate game sprite is displayed.
 - The Pokémon’s cry plays.
   - Any previously playing cry stops first.
-  - Cries respect the global audio mute state.
+  - Cries respect the cry toggle setting.
 - The row scrolls into view.
 - The row briefly highlights.
 - The counter updates immediately.
@@ -88,14 +87,16 @@ Where:
 ### Pokémon Cries
 
 - Play only on correct guesses for visible Pokémon.
-- Disabled when global audio mute is enabled.
+- Disabled when cry toggle is off.
+- Toggle state persists across sessions.
 - Only one cry may play at a time.
 
 ### Background Music
 
 - 8-bit loop.
-- Starts only after first user interaction (unless audio is muted).
-- Obeys global audio mute state.
+- OFF by default.
+- Starts only after first user interaction.
+- Toggle persists across sessions.
 - Fades out on:
   - Give Up
   - Completion
@@ -104,16 +105,6 @@ Where:
 
 - Plays once on completion.
 - Must not conflict with background music.
-- Stops immediately if the celebration modal is closed.
-
-### Global Audio Mute
-
-- A single header mute toggle controls all audio.
-- Muting must silence:
-  - Pokémon cries
-  - Background music
-  - Celebration sound
-- Mute state persists across sessions and resets.
 
 ---
 
@@ -168,7 +159,7 @@ Generation acts as a top-level gate and is not merged into OR category logic.
 
 ## 5. Give Up System
 
-- Accessible from a button adjacent to the guess input.
+- Accessible from Menu.
 - Requires confirmation modal.
 
 ### On Confirm
@@ -179,9 +170,7 @@ Generation acts as a top-level gate and is not merged into OR category logic.
   - Grayscale sprite
 - Music fades out.
 - Cries do not play.
-- Show a post-Give Up action row:
-  - “Show Only Missed” button on the left
-  - “Reset” button on the right
+- Show “Show Only Missed” button.
 - Auto-scroll to first missed Pokémon.
 - Does not modify filter or generation selections.
 
@@ -237,7 +226,7 @@ Reset must:
 - Hide Show Only Missed button.
 - Close overlays.
 - Clear guess input.
-- Preserve persisted settings state (audio mute, dark mode, timer visibility, misspelling acceptance).
+- Preserve music and cry toggle persistence.
 - Leave no modal or transient state active.
 
 ---
@@ -249,16 +238,16 @@ The game persists:
 - Guessed Pokémon IDs.
 - Generation filter selection.
 - Category filter selection.
-- Global audio mute state.
+- Audio toggle states.
 - Dark mode state.
-- Timer visibility state.
 - Mispelling acceptance state.
+- Alphabetical ordering state.
 
 ### On Reload
 
 - Guessed Pokémon restore visually.
 - Filters and generation selections restore.
-- Theme, timer visibility, and audio mute preferences restore.
+- Theme and ordering preferences restore.
 - The game does not auto-trigger completion on load.
 - Give Up state does not persist.
 
@@ -282,9 +271,9 @@ Example data structure:
 
 ## 11. UI Integrity Rules
 
-- Settings and filter drawer block background interaction.
+- Menu and filter drawer block background interaction.
 - No click-through behavior.
-- Modal-style surfaces (settings panel and Pokémon Select drawer) use 90% viewport height for larger content capacity.
+- Modal-style surfaces (menu panel and Pokémon Select drawer) use 90% viewport height for larger content capacity.
 - No console errors.
 - No frozen loading states.
 - No broken sprites after reset.

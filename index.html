@@ -7,6 +7,7 @@
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#D32F2F">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,10 +15,11 @@
 <header>
   <h1>Pokémon Memory Game</h1>
   <div class="header-actions">
-    <button id="timerVisibilityBtn" class="icon-btn" aria-label="Hide timer">🚫</button>
-    <button id="darkModeBtn" class="icon-btn" aria-label="Toggle dark mode">🌙</button>
-    <button id="muteBtn" class="icon-btn" aria-label="Mute audio">🔇</button>
-    <button id="settingsBtn" class="icon-btn" aria-label="Open settings">⚙️</button>
+    <button id="menuBtn" class="icon-btn" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+    </button>
   </div>
 </header>
 
@@ -55,19 +57,34 @@
   </div>
 </div>
 
-<!-- Settings -->
-<div id="settingsOverlay" class="overlay">
+<!-- Menu -->
+<div id="menuOverlay" class="overlay">
   <div class="panel">
-    <h3>Settings</h3>
+    <h3>Menu</h3>
 
-    <div class="toggle">
-      <input type="checkbox" id="misspellingToggle">
+    <label class="toggle" for="timerVisibilityToggle">
+      <span>Show timer</span>
+      <input type="checkbox" id="timerVisibilityToggle">
+    </label>
+
+    <label class="toggle" for="darkModeToggle">
+      <span>Dark mode</span>
+      <input type="checkbox" id="darkModeToggle">
+    </label>
+
+    <label class="toggle" for="muteToggle">
+      <span>Mute audio</span>
+      <input type="checkbox" id="muteToggle">
+    </label>
+
+    <label class="toggle" for="misspellingToggle">
       <span>Mispelling acceptance</span>
-    </div>
+      <input type="checkbox" id="misspellingToggle">
+    </label>
 
     <button id="openSelect">Pokémon Select</button>
     <button id="restartBtn">Reset</button>
-    <button id="closeSettings">Close</button>
+    <button id="closeMenu">Close</button>
   </div>
 </div>
 

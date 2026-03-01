@@ -86,6 +86,12 @@ button{
   color:var(--text);
 }
 
+.icon-btn svg{
+  width:20px;
+  height:20px;
+  display:block;
+}
+
 button:disabled{
   opacity:0.5;
   cursor:default;
@@ -242,12 +248,12 @@ button:disabled{
   text-align:center;
 }
 
-#settingsOverlay .panel{
+#menuOverlay .panel{
   text-align:left;
 }
 
-/* Stack settings buttons vertically */
-#settingsOverlay .panel > button {
+/* Stack menu buttons vertically */
+#menuOverlay .panel > button {
   display: block;
   width: 100%;
   margin-top: 12px;
@@ -283,17 +289,16 @@ button:disabled{
   max-height:90vh;
   z-index:5000;
 
-  display:flex;
+  display:none;
   flex-direction:column;
-
-  transform:translateY(100%);
-  transition:transform 0.3s ease;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-y;
 }
 
 #categoryContainer{
-  overflow-y:auto;
-  flex:1;
-  min-height:140px;
+  overflow:visible;
   margin-bottom:12px;
 }
 
@@ -303,11 +308,11 @@ button:disabled{
 
 #doneBtn{
   width:100%;
-  margin-top:auto;
+  margin-top:12px;
 }
 
 .bottom-sheet.open{
-  transform:translateY(0);
+  display:flex;
 }
 
 .sheet-actions{
@@ -328,17 +333,17 @@ button:disabled{
   cursor:pointer;
 }
 
-#settingsOverlay .toggle{
+#menuOverlay .toggle{
   justify-content:space-between;
   gap:14px;
   padding:10px 0;
 }
 
-#settingsOverlay .toggle span{
+#menuOverlay .toggle span{
   flex:1;
 }
 
-#settingsOverlay .toggle input[type="checkbox"]{
+#menuOverlay .toggle input[type="checkbox"]{
   -webkit-appearance:none;
   appearance:none;
   width:46px;
@@ -352,7 +357,7 @@ button:disabled{
   transition:background-color 0.2s ease,border-color 0.2s ease;
 }
 
-#settingsOverlay .toggle input[type="checkbox"]::before{
+#menuOverlay .toggle input[type="checkbox"]::before{
   content:"";
   position:absolute;
   top:2px;
@@ -364,16 +369,16 @@ button:disabled{
   transition:transform 0.2s ease;
 }
 
-#settingsOverlay .toggle input[type="checkbox"]:checked{
+#menuOverlay .toggle input[type="checkbox"]:checked{
   background:var(--primary);
   border-color:var(--primary);
 }
 
-#settingsOverlay .toggle input[type="checkbox"]:checked::before{
+#menuOverlay .toggle input[type="checkbox"]:checked::before{
   transform:translateX(20px);
 }
 
-#settingsOverlay .toggle input[type="checkbox"]:focus-visible{
+#menuOverlay .toggle input[type="checkbox"]:focus-visible{
   outline:2px solid var(--primary);
   outline-offset:2px;
 }
@@ -417,7 +422,7 @@ button:disabled{
 }
 
 .accordion-section{
-  overflow:hidden;
+  overflow:visible;
 }
 
 .accordion-section.collapsed{

@@ -1,38 +1,6 @@
 /* ================= UI ================= */
 
 function initUI(){
-  function syncTimerVisibilityButton(){
-    const btn = document.getElementById("timerVisibilityBtn");
-    if(!btn) return;
-
-    const timerIsVisible = timer.isVisible();
-    btn.textContent = timerIsVisible ? "🕒" : "🚫";
-    btn.setAttribute(
-      "aria-label",
-      timerIsVisible ? "Timer visible" : "Timer hidden"
-    );
-  }
-
-  function syncDarkModeButton(){
-    const btn = document.getElementById("darkModeBtn");
-    if(!btn) return;
-    btn.textContent = darkModeEnabled ? "🌙" : "☀️";
-    btn.setAttribute(
-      "aria-label",
-      darkModeEnabled ? "Dark mode enabled" : "Light mode enabled"
-    );
-  }
-
-  function syncMuteButton(){
-    const btn = document.getElementById("muteBtn");
-    if(!btn) return;
-    btn.textContent = audioMuted ? "🔇" : "🔊";
-    btn.setAttribute(
-      "aria-label",
-      audioMuted ? "Audio muted" : "Audio unmuted"
-    );
-  }
-
   function initAccordion(buttonId, sectionId){
     const button = document.getElementById(buttonId);
     const section = document.getElementById(sectionId);
@@ -50,42 +18,43 @@ document.getElementById("guessInput")
     handleGuess(e.target);
   });
 
-  /* ---- Settings Overlay ---- */
-  const settingsOverlay = document.getElementById("settingsOverlay");
-  const timerVisibilityBtn = document.getElementById("timerVisibilityBtn");
-  const darkModeBtn = document.getElementById("darkModeBtn");
-  const muteBtn = document.getElementById("muteBtn");
+  /* ---- Menu Overlay ---- */
+  const menuOverlay = document.getElementById("menuOverlay");
+  const timerVisibilityToggle = document.getElementById("timerVisibilityToggle");
+  const darkModeToggle = document.getElementById("darkModeToggle");
+  const muteToggle = document.getElementById("muteToggle");
 
-  syncTimerVisibilityButton();
-  timerVisibilityBtn.onclick=()=>{
-    timer.setVisibility(!timer.isVisible());
-    syncTimerVisibilityButton();
-  };
-
-  syncDarkModeButton();
-  darkModeBtn.onclick=()=>{
-    darkModeEnabled = !darkModeEnabled;
-    localStorage.setItem(DARK_MODE_SAVE_KEY, darkModeEnabled);
-    applyDarkMode();
-    syncDarkModeButton();
-  };
-
-  syncMuteButton();
-  if(muteBtn){
-    muteBtn.onclick = ()=>{
-      setAudioMuted(!audioMuted);
-      syncMuteButton();
-    };
+  if(timerVisibilityToggle){
+    timerVisibilityToggle.checked = timer.isVisible();
+    timerVisibilityToggle.addEventListener("change", e=>{
+      timer.setVisibility(e.target.checked);
+    });
   }
 
-  document.getElementById("settingsBtn").onclick=()=>{
-    timer.pauseForSettings();
-    settingsOverlay.style.display="flex";
+  if(darkModeToggle){
+    darkModeToggle.checked = darkModeEnabled;
+    darkModeToggle.addEventListener("change", e=>{
+      darkModeEnabled = e.target.checked;
+      localStorage.setItem(DARK_MODE_SAVE_KEY, darkModeEnabled);
+      applyDarkMode();
+    });
+  }
+
+  if(muteToggle){
+    muteToggle.checked = audioMuted;
+    muteToggle.addEventListener("change", e=>{
+      setAudioMuted(e.target.checked);
+    });
+  }
+
+  document.getElementById("menuBtn").onclick=()=>{
+    timer.pauseForMenu();
+    menuOverlay.style.display="flex";
     document.body.style.overflow="hidden";
   };
 
-  document.getElementById("closeSettings").onclick=()=>{
-    settingsOverlay.style.display="none";
+  document.getElementById("closeMenu").onclick=()=>{
+    menuOverlay.style.display="none";
     document.body.style.overflow="";
   };
 
@@ -123,7 +92,7 @@ document.getElementById("guessInput")
 
   /* ---- Give Up ---- */
   const confirmOverlay = document.getElementById("confirmOverlay");
-  const settingsPanel = document.getElementById("settingsOverlay");
+  const menuPanel = document.getElementById("menuOverlay");
 
   document.getElementById("giveUpBtn").onclick=()=>{
     confirmOverlay.style.display = "flex";
@@ -135,7 +104,7 @@ document.getElementById("guessInput")
 
   document.getElementById("confirmGiveUp").onclick=()=>{
     confirmOverlay.style.display = "none";
-    settingsPanel.style.display = "none";
+    menuPanel.style.display = "none";
     document.body.style.overflow = "";
     giveUp();
   };

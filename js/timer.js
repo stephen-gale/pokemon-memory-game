@@ -129,9 +129,9 @@ document.addEventListener("visibilitychange", ()=>{
   }
 });
 
-/* ---------- Settings Pause Hook ---------- */
+/* ---------- Menu Pause Hook ---------- */
 
-function pauseForSettings(){
+function pauseForMenu(){
   pauseTimer();
 }
 
@@ -191,7 +191,7 @@ init(){
 },
   toggle: toggleTimer,
   handleGuess: handleTimerGuess,
-  pauseForSettings,
+  pauseForMenu,
   lock: lockTimer,
   reset: resetTimer,
   setVisibility: setTimerVisibility,
