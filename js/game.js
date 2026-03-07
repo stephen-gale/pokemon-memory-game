@@ -165,6 +165,13 @@ function handleGuess(inputEl){
       playCry(pokemon.cry);
     }
 
+    // Award hint token every 3 guesses
+    const guessCount = guessedGlobal.size;
+    if(guessCount % 3 === 0){
+      hintTokens++;
+      updateHintButton();
+    }
+
     saveProgress();
     updateCounter();
     checkCompletion();
@@ -192,6 +199,7 @@ function checkCompletion(){
       playCelebration();
 
       const timeEl = document.getElementById("completionTime");
+      const hintsEl = document.getElementById("completionHints");
 
       const row = document.querySelector(".game-info-row");
       const timerIsHidden = row.classList.contains("timer-hidden");
@@ -201,6 +209,14 @@ function checkCompletion(){
         timeEl.classList.remove("hidden");
       } else {
         timeEl.classList.add("hidden");
+      }
+
+      // Show hints used if hints are enabled
+      if(hintsEnabled){
+        hintsEl.textContent = `Hints used: ${hintsUsed}`;
+        hintsEl.classList.remove("hidden");
+      } else {
+        hintsEl.classList.add("hidden");
       }
 
       document.getElementById("celebration").style.display = "flex";
@@ -236,6 +252,7 @@ function giveUp(){
   }
 
   fadeOutMusic();
+  updateHintButton(); // Hide hint button
 
   let firstMissed = null;
 
@@ -279,6 +296,11 @@ function resetGame(){
   guessedGlobal.clear();
   saveProgress();
   localStorage.removeItem(SAVE_KEY);
+
+  /* Reset hint system */
+  hintTokens = 0;
+  hintsUsed = 0;
+  updateHintButton();
 
   timer.reset();
 
@@ -337,6 +359,7 @@ function resetGame(){
   document.getElementById("menuOverlay").style.display = "none";
   document.getElementById("sheetOverlay").style.display = "none";
   document.getElementById("pokemonSheet").classList.remove("open");
+  document.getElementById("hintOverlay").style.display = "none";
   document.body.style.overflow = "";
 
   /* Reset input */
@@ -349,4 +372,86 @@ function resetGame(){
 
   /* Recalculate */
   applyFilter();
+}
+
+/* ---------- Hint System ---------- */
+
+function updateHintButton(){
+  const hintBtn = document.getElementById("hintBtn");
+  const hintBadge = document.getElementById("hintBadge");
+  
+  if(!hintsEnabled || gameFinished){
+    hintBtn.style.display = "none";
+    return;
+  }
+  
+  hintBtn.style.display = "flex";
+  
+  if(unlimitedHints){
+    hintBadge.textContent = "∞";
+    hintBtn.disabled = false;
+    hintBtn.classList.remove("disabled");
+  } else {
+    hintBadge.textContent = hintTokens;
+    if(hintTokens === 0){
+      hintBtn.disabled = true;
+      hintBtn.classList.add("disabled");
+    } else {
+      hintBtn.disabled = false;
+      hintBtn.classList.remove("disabled");
+    }
+  }
+}
+
+function showHint(){
+  if(!hintsEnabled || gameFinished) return;
+  if(!unlimitedHints && hintTokens === 0) return;
+  
+  // Get unguessed Pokemon from current filter
+  const unguessed = pokemonData.filter(p => {
+    if(guessedGlobal.has(p.id)) return false;
+    return matchesFilter(p);
+  });
+  
+  if(unguessed.length === 0) return;
+  
+  // Consume token
+  if(!unlimitedHints){
+    hintTokens--;
+  }
+  hintsUsed++;
+  
+  updateHintButton();
+  
+  // Pick random Pokemon
+  const randomPokemon = unguessed[Math.floor(Math.random() * unguessed.length)];
+  
+  // Build hint text
+  const name = randomPokemon.display;
+  const firstThree = name.substring(0, 3);
+  const remaining = name.length > 3 ? "_".repeat(name.length - 3) : "";
+  const hintText = firstThree + remaining;
+  
+  // Show dialog
+  const hintOverlay = document.getElementById("hintOverlay");
+  const hintSprite = document.getElementById("hintSprite");
+  const hintTextEl = document.getElementById("hintText");
+  
+  hintSprite.src = randomPokemon.sprite || "";
+  hintTextEl.textContent = hintText;
+  
+  hintOverlay.style.display = "flex";
+  document.body.style.overflow = "hidden";
+  
+  // Keep focus on input field
+  const guessInput = document.getElementById("guessInput");
+  if(guessInput){
+    setTimeout(() => guessInput.focus(), 0);
+  }
+}
+
+function closeHintDialog(){
+  const hintOverlay = document.getElementById("hintOverlay");
+  hintOverlay.style.display = "none";
+  document.body.style.overflow = "";
 }

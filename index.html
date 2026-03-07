@@ -46,6 +46,16 @@
 <div id="emptyMessage" class="hidden">No Pokémon selected</div>
 <div id="loading">Loading Pokémon...</div>
 
+<!-- Hint Button -->
+<button id="hintBtn" class="hint-btn" aria-label="Use hint">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18h6"></path>
+    <path d="M10 22h4"></path>
+    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8a6 6 0 0 0-12 0c0 1.33.47 2.48 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path>
+  </svg>
+  <span id="hintBadge" class="hint-badge">0</span>
+</button>
+
 <!-- Confirm Give Up -->
 <div id="confirmOverlay" class="overlay">
   <div class="panel">
@@ -78,8 +88,18 @@
     </label>
 
     <label class="toggle" for="misspellingToggle">
-      <span>Mispelling acceptance</span>
+      <span>Spelling help</span>
       <input type="checkbox" id="misspellingToggle">
+    </label>
+
+    <label class="toggle" for="hintsEnabledToggle">
+      <span>Hints enabled</span>
+      <input type="checkbox" id="hintsEnabledToggle">
+    </label>
+
+    <label class="toggle" for="unlimitedHintsToggle">
+      <span>Unlimited hints</span>
+      <input type="checkbox" id="unlimitedHintsToggle">
     </label>
 
     <button id="openSelect">Pokémon Select</button>
@@ -121,7 +141,17 @@
 <div id="celebration" class="overlay">
   <h2>🎉 Complete! 🎉</h2>
   <div id="completionTime" class="completion-time hidden"></div>
+  <div id="completionHints" class="completion-hints hidden"></div>
   <button id="closeCelebration">Close</button>
+</div>
+
+<!-- Hint Dialog -->
+<div id="hintOverlay" class="overlay">
+  <div class="panel hint-panel">
+    <img id="hintSprite" class="hint-sprite" alt="Pokemon sprite">
+    <div id="hintText" class="hint-text"></div>
+    <button id="closeHint">Close</button>
+  </div>
 </div>
 
 <script src="js/state.js"></script>

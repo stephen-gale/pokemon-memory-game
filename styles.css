@@ -457,3 +457,88 @@ button:disabled{
     transform:translateY(110vh) rotate(720deg);
   }
 }
+
+/* ================= HINT SYSTEM ================= */
+
+.hint-btn{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--primary);
+  color:white;
+  border:none;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  cursor:pointer;
+  transition:transform 0.2s ease,opacity 0.2s ease;
+  z-index:1000;
+}
+
+.hint-btn:hover:not(:disabled){
+  transform:scale(1.05);
+}
+
+.hint-btn:active:not(:disabled){
+  transform:scale(0.95);
+}
+
+.hint-btn.disabled{
+  opacity:0.4;
+  cursor:not-allowed;
+}
+
+.hint-btn svg{
+  width:32px;
+  height:32px;
+}
+
+.hint-badge{
+  position:absolute;
+  top:-4px;
+  right:-4px;
+  background:#D32F2F;
+  color:white;
+  border-radius:50%;
+  min-width:24px;
+  height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  font-weight:700;
+  padding:0 6px;
+  border:2px solid var(--surface);
+}
+
+.hint-panel{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+}
+
+.hint-sprite{
+  width:96px;
+  height:96px;
+  image-rendering:pixelated;
+}
+
+.hint-text{
+  font-size:24px;
+  font-weight:700;
+  letter-spacing:2px;
+  font-family:monospace;
+}
+
+.completion-hints{
+  margin:8px 0 12px 0;
+  font-size:16px;
+  font-weight:600;
+}
+

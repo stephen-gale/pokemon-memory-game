@@ -5,6 +5,8 @@ const FILTER_SAVE_KEY = "gen1-memory-filters";
 const MISSPELLING_SAVE_KEY = "misspellingEnabled";
 const DARK_MODE_SAVE_KEY = "darkModeEnabled";
 const AUDIO_MUTED_SAVE_KEY = "audioMuted";
+const HINTS_ENABLED_SAVE_KEY = "hintsEnabled";
+const UNLIMITED_HINTS_SAVE_KEY = "unlimitedHints";
 
 const supportedGenerations = [
   { id: 1, label: "Gen 1", startId: 1, endId: 151 },
@@ -83,6 +85,10 @@ let showingMissedOnly = false;
 let misspellingEnabled = true;
 let darkModeEnabled = false;
 let audioMuted = false;
+let hintsEnabled = true;
+let unlimitedHints = false;
+let hintTokens = 0;
+let hintsUsed = 0;
 
 function saveProgress(){
  localStorage.setItem(SAVE_KEY, JSON.stringify([...guessedGlobal]));
@@ -114,5 +120,17 @@ function loadAudioMutedSetting(){
   const saved = localStorage.getItem(AUDIO_MUTED_SAVE_KEY);
   if(saved !== null){
     audioMuted = saved === "true";
+  }
+}
+
+function loadHintSettings(){
+  const hintsEnabledSaved = localStorage.getItem(HINTS_ENABLED_SAVE_KEY);
+  if(hintsEnabledSaved !== null){
+    hintsEnabled = hintsEnabledSaved === "true";
+  }
+  
+  const unlimitedHintsSaved = localStorage.getItem(UNLIMITED_HINTS_SAVE_KEY);
+  if(unlimitedHintsSaved !== null){
+    unlimitedHints = unlimitedHintsSaved === "true";
   }
 }

@@ -27,8 +27,8 @@
 - Input is case-insensitive.
 - Minor formatting differences are tolerated (e.g., Farfetch’d → Farfetchd).
 - Minor misspellings are accepted when the intended Pokémon is unambiguous.
-- Menu include a “Mispelling acceptance” toggle to disable typo matching.
-- The “Mispelling acceptance” toggle persists across resets.
+- Menu include a “Spelling help” toggle to disable typo matching.
+- The “Spelling help” toggle persists across resets.
 - Duplicate guesses are ignored.
 - Input clears on correct guess.
 
@@ -240,7 +240,7 @@ The game persists:
 - Category filter selection.
 - Audio toggle states.
 - Dark mode state.
-- Mispelling acceptance state.
+- Spelling help state.
 - Alphabetical ordering state.
 
 ### On Reload
@@ -282,7 +282,83 @@ Example data structure:
 
 ---
 
-## 12. Version Control Rule
+## 12. Hint System
+
+Players have access to a hint feature that provides clues for unguessed Pokémon.
+
+### 12.1 Hint Button
+
+- A lightbulb icon button floats in the bottom-right corner of the screen.
+- The button is contained in a circular container.
+- The button displays a badge in the top-right showing the number of available hint tokens.
+- Badge styling: red circle with white text.
+- When unlimited hints is enabled, the badge displays an infinity symbol (∞).
+- When hint tokens are 0 (and unlimited hints is disabled), the button is greyed out and disabled.
+- The button is hidden entirely when:
+  - Hints are disabled in settings
+  - The player has triggered Give Up
+- The button includes proper accessibility: `aria-label="Use hint"`.
+
+### 12.2 Hint Token Economy
+
+- Players earn 1 hint token for every 3 correct guesses.
+- Hint tokens accumulate even when hints are disabled in settings.
+- If hints are re-enabled, accumulated tokens become available.
+- Hint tokens reset to 0 when the game is reset.
+
+### 12.3 Hint Dialog
+
+When the hint button is clicked:
+
+- A hint token is consumed immediately (unless unlimited hints is enabled).
+- A dialog overlay appears showing:
+  - The sprite of a random unguessed Pokémon from the current filter selection
+  - The first 3 letters of the Pokémon's name
+  - Remaining letters shown as underscores (e.g., "Bul______")
+  - For Pokémon with names 3 characters or shorter, the full name is displayed
+- A "Close" button allows dismissing the dialog.
+- Clicking outside the dialog also closes it.
+- The dialog is keyboard-accessible and can be closed with the Escape key.
+
+### 12.4 Hint Settings
+
+The Menu includes two hint-related toggles:
+
+- "Hints enabled" toggle:
+  - Controls visibility of the hint button
+  - When disabled, the hint button is hidden
+  - Hint tokens continue to accumulate in the background
+  - Setting persists across sessions
+  - Default: enabled
+
+- "Unlimited hints" toggle:
+  - When enabled, hints can be used without consuming tokens
+  - The hint badge displays ∞ instead of a number
+  - Setting persists across sessions
+  - Default: disabled
+
+### 12.5 Completion Display
+
+- When the game is completed and hints are enabled, the completion overlay displays the number of hints used.
+- Format: "Hints used: X"
+- If hints are disabled at the time of completion, this information is hidden.
+- Hints used counter resets to 0 when the game is reset.
+
+### 12.6 Hint Persistence
+
+The following hint-related data persists across sessions:
+
+- Hints enabled setting
+- Unlimited hints setting
+
+The following does NOT persist:
+
+- Current hint token count (resets to 0 on page load)
+- Hints used count (resets to 0 on page load)
+
+---
+
+## 13. Version Control Rule
 
 Any new feature must:
 

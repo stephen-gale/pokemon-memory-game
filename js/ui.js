@@ -13,10 +13,17 @@ function initUI(){
   }
 
   /* ---- Guess Input ---- */
-document.getElementById("guessInput")
-  .addEventListener("input", e=>{
-    handleGuess(e.target);
-  });
+const guessInput = document.getElementById("guessInput");
+
+guessInput.addEventListener("input", e=>{
+  // Close hint dialog if open when user starts typing
+  const hintOverlay = document.getElementById("hintOverlay");
+  if(hintOverlay.style.display === "flex"){
+    closeHintDialog();
+  }
+  
+  handleGuess(e.target);
+});
 
   /* ---- Menu Overlay ---- */
   const menuOverlay = document.getElementById("menuOverlay");
@@ -142,6 +149,46 @@ document.getElementById("timerBtn").onclick = timer.toggle;
   misspellingToggle.addEventListener("change", e=>{
     misspellingEnabled = e.target.checked;
     localStorage.setItem(MISSPELLING_SAVE_KEY, misspellingEnabled);
+  });
+
+  /* ---- Hints Enabled Toggle ---- */
+  const hintsEnabledToggle = document.getElementById("hintsEnabledToggle");
+  hintsEnabledToggle.checked = hintsEnabled;
+
+  hintsEnabledToggle.addEventListener("change", e=>{
+    hintsEnabled = e.target.checked;
+    localStorage.setItem(HINTS_ENABLED_SAVE_KEY, hintsEnabled);
+    updateHintButton();
+  });
+
+  /* ---- Unlimited Hints Toggle ---- */
+  const unlimitedHintsToggle = document.getElementById("unlimitedHintsToggle");
+  unlimitedHintsToggle.checked = unlimitedHints;
+
+  unlimitedHintsToggle.addEventListener("change", e=>{
+    unlimitedHints = e.target.checked;
+    localStorage.setItem(UNLIMITED_HINTS_SAVE_KEY, unlimitedHints);
+    updateHintButton();
+  });
+
+  /* ---- Hint Button ---- */
+  document.getElementById("hintBtn").onclick = showHint;
+
+  /* ---- Close Hint Dialog ---- */
+  const hintOverlay = document.getElementById("hintOverlay");
+  
+  document.getElementById("closeHint").onclick = closeHintDialog;
+  
+  hintOverlay.addEventListener("click", e => {
+    if (e.target === hintOverlay) {
+      closeHintDialog();
+    }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && hintOverlay.style.display === "flex") {
+      closeHintDialog();
+    }
   });
 
 }

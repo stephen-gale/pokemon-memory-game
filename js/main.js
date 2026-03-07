@@ -220,6 +220,7 @@ async function init(){
  loadAudioMutedSetting();
  loadMisspellingSetting();
  loadDarkModeSetting();
+ loadHintSettings();
 
  const pokemonIndex = await buildPokemonIndex();
  const evolutionStageMap = await buildEvolutionStageMap(pokemonIndex);
@@ -245,6 +246,7 @@ async function init(){
  applyFilter();
  timer.init();
  initUI();
+ updateHintButton();
 
  document.getElementById("loading").classList.add("hidden");
 }
