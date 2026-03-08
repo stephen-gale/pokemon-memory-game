@@ -93,6 +93,19 @@ async function runConcurrent(items, worker, concurrency = 30){
 }
 
 async function buildEvolutionStageMap(indexEntries){
+  // Try to load from cache first
+  try{
+    const cached = localStorage.getItem(EVOLUTION_STAGE_CACHE_KEY);
+    if(cached){
+      const { version, data } = JSON.parse(cached);
+      if(version === CACHE_VERSION){
+        return new Map(data);
+      }
+    }
+  }catch{
+    // Cache invalid or corrupted, continue to fetch
+  }
+
   const speciesIds = [...new Set(indexEntries.map(entry=>entry.id))];
   const speciesMeta = await runConcurrent(
     speciesIds,
@@ -108,7 +121,7 @@ async function buildEvolutionStageMap(indexEntries){
         return { speciesId, chainId: null };
       }
     },
-    30
+    50 // Increased concurrency
   );
 
   const chainIds = [...new Set(
@@ -142,7 +155,7 @@ async function buildEvolutionStageMap(indexEntries){
         // Keep default stage fallback for failed chains.
       }
     },
-    20
+    50 // Increased concurrency
   );
 
   speciesIds.forEach(speciesId=>{
@@ -151,35 +164,64 @@ async function buildEvolutionStageMap(indexEntries){
     }
   });
 
+  // Cache the result
+  try{
+    localStorage.setItem(EVOLUTION_STAGE_CACHE_KEY, JSON.stringify({
+      version: CACHE_VERSION,
+      data: Array.from(stageBySpeciesId.entries())
+    }));
+  }catch{
+    // localStorage full or unavailable, continue without caching
+  }
+
   return stageBySpeciesId;
 }
 
 async function buildPokemonIndex(){
-  const generationEntries = await Promise.all(
-    supportedGenerations.map(async gen=>{
-      try{
-        const res = await fetch(`https://pokeapi.co/api/v2/generation/${gen.id}`);
-        const data = await res.json();
-
-        return data.pokemon_species
-          .map(species=>{
-            const speciesId = getSpeciesIdFromUrl(species.url);
-            if(!speciesId) return null;
-            return { id: speciesId, generation: gen.id };
-          })
-          .filter(Boolean);
-      }catch{
-        return [];
-      }
-    })
-  );
-
-  return generationEntries
-    .flat()
-    .sort((a,b)=>a.id-b.id);
+  // Use the pokemon-species list endpoint with limit to get all at once
+  try{
+    const res = await fetch('https://pokeapi.co/api/v2/pokemon-species?limit=1025');
+    const data = await res.json();
+    
+    const indexEntries = data.results
+      .map((species, idx) => {
+        const id = idx + 1; // Pokemon IDs are 1-indexed
+        
+        // Determine generation based on ID ranges
+        let generation = 1;
+        if(id >= 906) generation = 9;
+        else if(id >= 810) generation = 8;
+        else if(id >= 722) generation = 7;
+        else if(id >= 650) generation = 6;
+        else if(id >= 494) generation = 5;
+        else if(id >= 387) generation = 4;
+        else if(id >= 252) generation = 3;
+        else if(id >= 152) generation = 2;
+        
+        return { id, generation };
+      })
+      .filter(entry => entry.id <= 1025); // Only include up to Gen 9
+    
+    return indexEntries;
+  }catch{
+    return [];
+  }
 }
 
 async function loadPokemonData(indexEntries, evolutionStageMap){
+  // Try to load from cache first
+  try{
+    const cached = localStorage.getItem(POKEMON_DATA_CACHE_KEY);
+    if(cached){
+      const { version, data } = JSON.parse(cached);
+      if(version === CACHE_VERSION && data.length === indexEntries.length){
+        return data;
+      }
+    }
+  }catch{
+    // Cache invalid or corrupted, continue to fetch
+  }
+
   const results = await runConcurrent(
     indexEntries,
     async entry=>{
@@ -208,8 +250,18 @@ async function loadPokemonData(indexEntries, evolutionStageMap){
         };
       }
     },
-    30
+    50 // Increased concurrency
   );
+
+  // Cache the result
+  try{
+    localStorage.setItem(POKEMON_DATA_CACHE_KEY, JSON.stringify({
+      version: CACHE_VERSION,
+      data: results
+    }));
+  }catch{
+    // localStorage full or unavailable, continue without caching
+  }
 
   return results;
 }
