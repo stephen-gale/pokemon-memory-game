@@ -7,6 +7,8 @@ const DARK_MODE_SAVE_KEY = "darkModeEnabled";
 const AUDIO_MUTED_SAVE_KEY = "audioMuted";
 const HINTS_ENABLED_SAVE_KEY = "hintsEnabled";
 const UNLIMITED_HINTS_SAVE_KEY = "unlimitedHints";
+const HINT_TOKENS_SAVE_KEY = "hintTokens";
+const HINTS_USED_SAVE_KEY = "hintsUsed";
 
 const supportedGenerations = [
   { id: 1, label: "Gen 1", startId: 1, endId: 151 },
@@ -132,5 +134,15 @@ function loadHintSettings(){
   const unlimitedHintsSaved = localStorage.getItem(UNLIMITED_HINTS_SAVE_KEY);
   if(unlimitedHintsSaved !== null){
     unlimitedHints = unlimitedHintsSaved === "true";
+  }
+  
+  const hintTokensSaved = localStorage.getItem(HINT_TOKENS_SAVE_KEY);
+  if(hintTokensSaved !== null){
+    hintTokens = parseInt(hintTokensSaved, 10) || 0;
+  }
+  
+  const hintsUsedSaved = localStorage.getItem(HINTS_USED_SAVE_KEY);
+  if(hintsUsedSaved !== null){
+    hintsUsed = parseInt(hintsUsedSaved, 10) || 0;
   }
 }

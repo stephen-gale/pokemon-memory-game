@@ -434,8 +434,28 @@ button:disabled{
 #celebration{
   background:rgba(0,0,0,0.9);
   color:white;
-  flex-direction:column;
   z-index:6000;
+}
+
+#celebration .panel{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+#celebration h2{
+  margin:0 0 16px 0;
+}
+
+.celebration-buttons{
+  display:flex;
+  gap:12px;
+  margin-top:8px;
+}
+
+.celebration-buttons button{
+  flex:1;
+  min-width:120px;
 }
 
 .confetti{

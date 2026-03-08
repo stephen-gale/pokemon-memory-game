@@ -300,6 +300,8 @@ function resetGame(){
   /* Reset hint system */
   hintTokens = 0;
   hintsUsed = 0;
+  localStorage.setItem(HINT_TOKENS_SAVE_KEY, hintTokens);
+  localStorage.setItem(HINTS_USED_SAVE_KEY, hintsUsed);
   updateHintButton();
 
   timer.reset();
@@ -401,6 +403,9 @@ function updateHintButton(){
       hintBtn.classList.remove("disabled");
     }
   }
+  
+  // Save hint tokens
+  localStorage.setItem(HINT_TOKENS_SAVE_KEY, hintTokens);
 }
 
 function showHint(){
@@ -420,6 +425,9 @@ function showHint(){
     hintTokens--;
   }
   hintsUsed++;
+  
+  // Save hints used
+  localStorage.setItem(HINTS_USED_SAVE_KEY, hintsUsed);
   
   updateHintButton();
   

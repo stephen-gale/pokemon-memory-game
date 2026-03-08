@@ -142,6 +142,20 @@ document.getElementById("timerBtn").onclick = timer.toggle;
     if(!audioMuted) startMusic();
   };
 
+  /* ---- Open Pokemon Select from Celebration ---- */
+  document.getElementById("openSelectFromCelebration").onclick=()=>{
+    // Close celebration first
+    stopCelebration();
+    document.getElementById("celebration").style.display="none";
+    gameFinished=false;
+    if(!audioMuted) startMusic();
+    
+    // Open Pokemon Select drawer
+    sheetOverlay.style.display="block";
+    sheet.classList.add("open");
+    document.body.style.overflow="hidden";
+  };
+
   /* ---- Mispelling Toggle ---- */
   const misspellingToggle = document.getElementById("misspellingToggle");
   misspellingToggle.checked = misspellingEnabled;

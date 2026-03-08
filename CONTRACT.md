@@ -56,6 +56,7 @@
 - The row scrolls into view.
 - The row briefly highlights.
 - The counter updates immediately.
+- Every 3rd correct guess awards 1 hint token.
 
 ---
 
@@ -170,6 +171,7 @@ Generation acts as a top-level gate and is not merged into OR category logic.
   - Grayscale sprite
 - Music fades out.
 - Cries do not play.
+- Hint button is hidden.
 - Show “Show Only Missed” button.
 - Auto-scroll to first missed Pokémon.
 - Does not modify filter or generation selections.
@@ -200,8 +202,14 @@ Visible Pokémon are determined by active generation and category filters.
 
 - Music fades out.
 - Celebration sound plays once.
-- Celebration overlay appears.
+- Celebration overlay appears with:
+  - Completion message
+  - Time (if timer is visible)
+  - Hints used (if hints are enabled)
+  - "Pokémon Select" button to open the filter drawer
+  - "Close" button to dismiss the overlay
 - Further guessing is disabled.
+- Clicking "Pokémon Select" closes the celebration overlay and opens the Pokémon Select drawer.
 
 ### Filter or Generation Changes During Completion
 
@@ -223,10 +231,13 @@ Reset must:
 - Restore all category filters.
 - Recalculate visible Pokémon.
 - Reset counter to `0 / totalVisiblePokemon`.
+- Reset hint tokens to 0.
+- Reset hints used to 0.
 - Hide Show Only Missed button.
 - Close overlays.
 - Clear guess input.
 - Preserve music and cry toggle persistence.
+- Preserve hint settings (hints enabled, unlimited hints).
 - Leave no modal or transient state active.
 
 ---
@@ -242,12 +253,16 @@ The game persists:
 - Dark mode state.
 - Spelling help state.
 - Alphabetical ordering state.
+- Hint settings (hints enabled, unlimited hints).
+- Hint token count.
+- Hints used count.
 
 ### On Reload
 
 - Guessed Pokémon restore visually.
 - Filters and generation selections restore.
 - Theme and ordering preferences restore.
+- Hint tokens and hints used restore.
 - The game does not auto-trigger completion on load.
 - Give Up state does not persist.
 
@@ -316,6 +331,8 @@ When the hint button is clicked:
   - The first 3 letters of the Pokémon's name
   - Remaining letters shown as underscores (e.g., "Bul______")
   - For Pokémon with names 3 characters or shorter, the full name is displayed
+- The guess input field remains in focus during the hint dialog.
+- When the player starts typing, the hint dialog automatically closes and input works normally.
 - A "Close" button allows dismissing the dialog.
 - Clicking outside the dialog also closes it.
 - The dialog is keyboard-accessible and can be closed with the Escape key.
@@ -350,11 +367,10 @@ The following hint-related data persists across sessions:
 
 - Hints enabled setting
 - Unlimited hints setting
+- Current hint token count
+- Hints used count
 
-The following does NOT persist:
-
-- Current hint token count (resets to 0 on page load)
-- Hints used count (resets to 0 on page load)
+All hint data resets to 0 when the game is reset.
 
 ---
 
