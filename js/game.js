@@ -604,6 +604,8 @@ function showAnotherHint(){
   if(!hintsEnabled || gameFinished) return;
   if(!unlimitedHints && hintTokens === 0) return;
   
+  console.log('showAnotherHint - v2 code running');
+  
   // Consume token
   if(!unlimitedHints){
     hintTokens--;
