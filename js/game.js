@@ -514,9 +514,15 @@ function giveUpHintPokemon(){
       // No more unguessed pokemon, close the dialog
       closeHintDialog();
     }
+    // Don't refocus - keep existing focus state to prevent keyboard jump
   } else {
     // In normal mode, close the hint dialog
     closeHintDialog();
+    // Restore focus only if input doesn't already have it
+    const guessInput = document.getElementById("guessInput");
+    if(guessInput && document.activeElement !== guessInput){
+      setTimeout(() => guessInput.focus(), 100);
+    }
   }
 }
 
@@ -550,9 +556,9 @@ function showHint(){
   // Adjust for keyboard on mobile
   adjustHintDialogForKeyboard();
   
-  // Keep focus on input field
+  // Keep focus on input field only if not already focused
   const guessInput = document.getElementById("guessInput");
-  if(guessInput){
+  if(guessInput && document.activeElement !== guessInput){
     setTimeout(() => guessInput.focus(), 0);
   }
 }
@@ -619,11 +625,7 @@ function showAnotherHint(){
   // Update another hint button state
   updateAnotherHintButton();
   
-  // Keep focus on input field
-  const guessInput = document.getElementById("guessInput");
-  if(guessInput){
-    setTimeout(() => guessInput.focus(), 0);
-  }
+  // Don't refocus - keep existing focus state to prevent keyboard jump
 }
 
 function closeHintDialog(){
