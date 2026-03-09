@@ -137,6 +137,12 @@ function reveal(id){
 function handleGuess(inputEl){
 
   if(gameFinished) return;
+  
+  // Ignore input if locked (prevents typing overflow after correct guess)
+  if(inputLocked) {
+    inputEl.value = "";
+    return;
+  }
 
   timer.handleGuess();
 
@@ -172,12 +178,21 @@ function handleGuess(inputEl){
       updateHintButton();
     }
 
+    // Check if hint dialog needs to update (unlimited hints mode)
+    checkAndUpdateHintIfGuessed();
+
     saveProgress();
     updateCounter();
     checkCompletion();
     document.getElementById(`row-${pokemon.id}`)
       .scrollIntoView({behavior:"smooth", block:"center"});
     inputEl.value = "";
+    
+    // Lock input briefly to prevent typing overflow
+    inputLocked = true;
+    setTimeout(() => {
+      inputLocked = false;
+    }, 300);
   }
 }
 
@@ -294,6 +309,7 @@ function resetGame(){
 
   /* Clear guesses */
   guessedGlobal.clear();
+  givenUpPokemon.clear();
   saveProgress();
   localStorage.removeItem(SAVE_KEY);
 
@@ -408,17 +424,105 @@ function updateHintButton(){
   localStorage.setItem(HINT_TOKENS_SAVE_KEY, hintTokens);
 }
 
-function showHint(){
-  if(!hintsEnabled || gameFinished) return;
-  if(!unlimitedHints && hintTokens === 0) return;
+function updateAnotherHintButton(){
+  const anotherHintBtn = document.getElementById("anotherHint");
   
-  // Get unguessed Pokemon from current filter
+  if(unlimitedHints){
+    anotherHintBtn.disabled = false;
+  } else {
+    anotherHintBtn.disabled = hintTokens === 0;
+  }
+}
+
+function displayHintPokemon(){
+  // Get unguessed Pokemon from current filter (exclude both guessed and given up)
   const unguessed = pokemonData.filter(p => {
     if(guessedGlobal.has(p.id)) return false;
+    if(givenUpPokemon.has(p.id)) return false;
     return matchesFilter(p);
   });
   
-  if(unguessed.length === 0) return;
+  if(unguessed.length === 0) return null;
+  
+  // Pick random Pokemon
+  const randomPokemon = unguessed[Math.floor(Math.random() * unguessed.length)];
+  
+  // Build hint text
+  const name = randomPokemon.display;
+  const firstThree = name.substring(0, 3);
+  const remaining = name.length > 3 ? "_".repeat(name.length - 3) : "";
+  const hintText = firstThree + remaining;
+  
+  // Update dialog
+  const hintSprite = document.getElementById("hintSprite");
+  const hintTextEl = document.getElementById("hintText");
+  
+  hintSprite.src = randomPokemon.sprite || "";
+  hintTextEl.textContent = hintText;
+  
+  // Store current hint pokemon ID for tracking
+  window.currentHintPokemonId = randomPokemon.id;
+  
+  return randomPokemon;
+}
+
+function checkAndUpdateHintIfGuessed(){
+  // Only auto-update if unlimited hints is enabled and hint dialog is open
+  if(!unlimitedHints) return;
+  
+  const hintOverlay = document.getElementById("hintOverlay");
+  if(hintOverlay.style.display !== "flex") return;
+  
+  // Check if the currently displayed hint pokemon was just guessed or given up
+  if(window.currentHintPokemonId && (guessedGlobal.has(window.currentHintPokemonId) || givenUpPokemon.has(window.currentHintPokemonId))){
+    // Display a new hint automatically
+    const pokemon = displayHintPokemon();
+    if(!pokemon){
+      // No more unguessed pokemon, close the dialog
+      closeHintDialog();
+    }
+  }
+}
+
+function giveUpHintPokemon(){
+  if(!window.currentHintPokemonId) return;
+  
+  const pokemonId = window.currentHintPokemonId;
+  
+  // Mark as given up
+  givenUpPokemon.add(pokemonId);
+  
+  // Reveal the Pokemon with "missed" styling (shared with global give up)
+  reveal(pokemonId);
+  
+  const nameEl = document.getElementById(`name-${pokemonId}`);
+  const spriteEl = document.getElementById(`sprite-${pokemonId}`);
+  
+  if(nameEl) nameEl.classList.add("missed-name");
+  if(spriteEl) spriteEl.classList.add("grayscale");
+  
+  // Scroll to the revealed Pokemon
+  const rowEl = document.getElementById(`row-${pokemonId}`);
+  if(rowEl){
+    rowEl.scrollIntoView({behavior:"smooth", block:"center"});
+  }
+  
+  // In unlimited hints mode, automatically show next hint
+  if(unlimitedHints){
+    const pokemon = displayHintPokemon();
+    if(!pokemon){
+      // No more unguessed pokemon, close the dialog
+      closeHintDialog();
+    }
+  } else {
+    // In normal mode, close the hint dialog
+    closeHintDialog();
+  }
+}
+
+function showHint(){
+  if(!hintsEnabled || gameFinished) return;
+  if(!unlimitedHints && hintTokens === 0) return;
   
   // Consume token
   if(!unlimitedHints){
@@ -431,25 +535,89 @@ function showHint(){
   
   updateHintButton();
   
-  // Pick random Pokemon
-  const randomPokemon = unguessed[Math.floor(Math.random() * unguessed.length)];
-  
-  // Build hint text
-  const name = randomPokemon.display;
-  const firstThree = name.substring(0, 3);
-  const remaining = name.length > 3 ? "_".repeat(name.length - 3) : "";
-  const hintText = firstThree + remaining;
+  // Display hint
+  const pokemon = displayHintPokemon();
+  if(!pokemon) return;
   
   // Show dialog
   const hintOverlay = document.getElementById("hintOverlay");
-  const hintSprite = document.getElementById("hintSprite");
-  const hintTextEl = document.getElementById("hintText");
-  
-  hintSprite.src = randomPokemon.sprite || "";
-  hintTextEl.textContent = hintText;
-  
   hintOverlay.style.display = "flex";
   document.body.style.overflow = "hidden";
+  
+  // Update another hint button state
+  updateAnotherHintButton();
+  
+  // Adjust for keyboard on mobile
+  adjustHintDialogForKeyboard();
+  
+  // Keep focus on input field
+  const guessInput = document.getElementById("guessInput");
+  if(guessInput){
+    setTimeout(() => guessInput.focus(), 0);
+  }
+}
+
+function adjustHintDialogForKeyboard(){
+  // Use Visual Viewport API to detect keyboard
+  if(window.visualViewport){
+    const updatePosition = () => {
+      const hintPanel = document.querySelector(".hint-panel");
+      if(!hintPanel) return;
+      
+      const viewportHeight = window.visualViewport.height;
+      const windowHeight = window.innerHeight;
+      
+      // If viewport is significantly smaller than window, keyboard is likely showing
+      if(windowHeight - viewportHeight > 150){
+        hintPanel.style.maxHeight = `${viewportHeight * 0.7}px`;
+        hintPanel.style.top = `${viewportHeight * 0.05}px`;
+      } else {
+        hintPanel.style.maxHeight = "";
+        hintPanel.style.top = "";
+      }
+    };
+    
+    // Update on viewport resize (keyboard show/hide)
+    window.visualViewport.addEventListener("resize", updatePosition);
+    window.visualViewport.addEventListener("scroll", updatePosition);
+    
+    // Initial update
+    updatePosition();
+    
+    // Store cleanup function
+    if(!window.hintViewportCleanup){
+      window.hintViewportCleanup = () => {
+        window.visualViewport.removeEventListener("resize", updatePosition);
+        window.visualViewport.removeEventListener("scroll", updatePosition);
+      };
+    }
+  }
+}
+
+function showAnotherHint(){
+  if(!hintsEnabled || gameFinished) return;
+  if(!unlimitedHints && hintTokens === 0) return;
+  
+  // Consume token
+  if(!unlimitedHints){
+    hintTokens--;
+  }
+  hintsUsed++;
+  
+  // Save hints used
+  localStorage.setItem(HINTS_USED_SAVE_KEY, hintsUsed);
+  
+  updateHintButton();
+  
+  // Display new hint
+  const pokemon = displayHintPokemon();
+  if(!pokemon){
+    closeHintDialog();
+    return;
+  }
+  
+  // Update another hint button state
+  updateAnotherHintButton();
   
   // Keep focus on input field
   const guessInput = document.getElementById("guessInput");
@@ -462,4 +630,17 @@ function closeHintDialog(){
   const hintOverlay = document.getElementById("hintOverlay");
   hintOverlay.style.display = "none";
   document.body.style.overflow = "";
+  
+  // Cleanup viewport listeners
+  if(window.hintViewportCleanup){
+    window.hintViewportCleanup();
+    window.hintViewportCleanup = null;
+  }
+  
+  // Reset panel styles
+  const hintPanel = document.querySelector(".hint-panel");
+  if(hintPanel){
+    hintPanel.style.maxHeight = "";
+    hintPanel.style.top = "";
+  }
 }

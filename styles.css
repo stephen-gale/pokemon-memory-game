@@ -541,6 +541,25 @@ button:disabled{
   flex-direction:column;
   align-items:center;
   gap:16px;
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+/* Position hint dialog higher on mobile to account for keyboard */
+@media (max-width: 768px) {
+  #hintOverlay .hint-panel {
+    position:fixed;
+    top:10vh;
+    bottom:auto;
+    max-height:80vh;
+  }
+}
+
+/* Use visualViewport API support for better keyboard handling */
+@supports (height: 100dvh) {
+  #hintOverlay .hint-panel {
+    max-height:80dvh;
+  }
 }
 
 .hint-sprite{
@@ -554,6 +573,32 @@ button:disabled{
   font-weight:700;
   letter-spacing:2px;
   font-family:monospace;
+}
+
+.hint-buttons{
+  display:flex;
+  gap:12px;
+  width:100%;
+}
+
+.hint-buttons button{
+  flex:1;
+  white-space:nowrap;
+  font-size:14px;
+  padding:10px 12px;
+}
+
+.hint-keep-open{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+  cursor:pointer;
+  margin-top:4px;
+}
+
+.hint-keep-open input[type="checkbox"]{
+  cursor:pointer;
 }
 
 .completion-hints{

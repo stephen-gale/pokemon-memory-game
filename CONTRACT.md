@@ -253,7 +253,7 @@ The game persists:
 - Dark mode state.
 - Spelling help state.
 - Alphabetical ordering state.
-- Hint settings (hints enabled, unlimited hints).
+- Hint settings (hints enabled, unlimited hints, keep open).
 - Hint token count.
 - Hints used count.
 
@@ -263,6 +263,7 @@ The game persists:
 - Filters and generation selections restore.
 - Theme and ordering preferences restore.
 - Hint tokens and hints used restore.
+- Hint keep open checkbox state restores.
 - The game does not auto-trigger completion on load.
 - Give Up state does not persist.
 
@@ -331,11 +332,46 @@ When the hint button is clicked:
   - The first 3 letters of the Pokémon's name
   - Remaining letters shown as underscores (e.g., "Bul______")
   - For Pokémon with names 3 characters or shorter, the full name is displayed
+  - "Another hint" button to show a different random Pokémon hint
+  - "Give Up" button to reveal the currently displayed Pokémon
+  - "Close" button to dismiss the dialog
+  - "Keep open" checkbox below the buttons
 - The guess input field remains in focus during the hint dialog.
-- When the player starts typing, the hint dialog automatically closes and input works normally.
-- A "Close" button allows dismissing the dialog.
+- When the player starts typing:
+  - If "Keep open" is unchecked: the hint dialog automatically closes and input works normally
+  - If "Keep open" is checked: the hint dialog remains visible, allowing continuous guessing with the hint visible
 - Clicking outside the dialog also closes it.
 - The dialog is keyboard-accessible and can be closed with the Escape key.
+
+### 12.3.1 Another Hint Button
+
+- The "Another hint" button appears in the hint dialog.
+- When clicked, it displays a different random unguessed Pokémon hint.
+- In normal mode:
+  - Consumes 1 hint token per use
+  - Disabled when no hint tokens remain (hintTokens === 0)
+- In unlimited hints mode:
+  - Always enabled
+  - Does not consume tokens
+  - Automatically updates to show a new hint when the currently displayed Pokémon is guessed correctly or given up
+- Each use increments the hints used counter.
+
+### 12.3.2 Reveal Button (Individual Pokémon)
+
+- The "Reveal" button appears in the hint dialog.
+- When clicked, reveals the currently displayed Pokémon:
+  - Pokémon name is revealed in the list
+  - Sprite is displayed with grayscale filter (shared class: `grayscale`)
+  - Name is displayed in red text (shared class: `missed-name`)
+  - Pokémon is scrolled into view
+  - Pokémon is NOT counted toward completion
+  - Pokémon will not appear in future hints
+- Behavior after reveal:
+  - In normal mode: hint dialog closes
+  - In unlimited hints mode: automatically displays next unguessed Pokémon
+- Revealed Pokémon are tracked separately from guessed Pokémon
+- Revealed Pokémon are cleared on game reset
+- Styling classes are shared with global Give Up to ensure consistency
 
 ### 12.4 Hint Settings
 
@@ -369,8 +405,9 @@ The following hint-related data persists across sessions:
 - Unlimited hints setting
 - Current hint token count
 - Hints used count
+- Keep open checkbox state
 
-All hint data resets to 0 when the game is reset.
+All hint data resets to 0 when the game is reset (except settings).
 
 ---
 

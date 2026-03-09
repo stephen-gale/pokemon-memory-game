@@ -16,9 +16,9 @@ function initUI(){
 const guessInput = document.getElementById("guessInput");
 
 guessInput.addEventListener("input", e=>{
-  // Close hint dialog if open when user starts typing
+  // Close hint dialog if open when user starts typing (unless keep open is checked)
   const hintOverlay = document.getElementById("hintOverlay");
-  if(hintOverlay.style.display === "flex"){
+  if(hintOverlay.style.display === "flex" && !hintKeepOpen){
     closeHintDialog();
   }
   
@@ -188,10 +188,23 @@ document.getElementById("timerBtn").onclick = timer.toggle;
   /* ---- Hint Button ---- */
   document.getElementById("hintBtn").onclick = showHint;
 
+  /* ---- Hint Keep Open Checkbox ---- */
+  const hintKeepOpenCheckbox = document.getElementById("hintKeepOpen");
+  hintKeepOpenCheckbox.checked = hintKeepOpen;
+  
+  hintKeepOpenCheckbox.addEventListener("change", e => {
+    hintKeepOpen = e.target.checked;
+    localStorage.setItem(HINT_KEEP_OPEN_SAVE_KEY, hintKeepOpen);
+  });
+
   /* ---- Close Hint Dialog ---- */
   const hintOverlay = document.getElementById("hintOverlay");
   
   document.getElementById("closeHint").onclick = closeHintDialog;
+  
+  document.getElementById("anotherHint").onclick = showAnotherHint;
+  
+  document.getElementById("giveUpHint").onclick = giveUpHintPokemon;
   
   hintOverlay.addEventListener("click", e => {
     if (e.target === hintOverlay) {

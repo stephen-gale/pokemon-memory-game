@@ -9,6 +9,7 @@ const HINTS_ENABLED_SAVE_KEY = "hintsEnabled";
 const UNLIMITED_HINTS_SAVE_KEY = "unlimitedHints";
 const HINT_TOKENS_SAVE_KEY = "hintTokens";
 const HINTS_USED_SAVE_KEY = "hintsUsed";
+const HINT_KEEP_OPEN_SAVE_KEY = "hintKeepOpen";
 const POKEMON_DATA_CACHE_KEY = "pokemonDataCache";
 const EVOLUTION_STAGE_CACHE_KEY = "evolutionStageCache";
 const CACHE_VERSION = "v1"; // Increment this to invalidate cache
@@ -94,6 +95,10 @@ let hintsEnabled = true;
 let unlimitedHints = false;
 let hintTokens = 0;
 let hintsUsed = 0;
+let hintKeepOpen = false;
+let inputLocked = false;
+
+let givenUpPokemon = new Set(); // Track individually given up Pokemon
 
 function saveProgress(){
  localStorage.setItem(SAVE_KEY, JSON.stringify([...guessedGlobal]));
@@ -147,5 +152,10 @@ function loadHintSettings(){
   const hintsUsedSaved = localStorage.getItem(HINTS_USED_SAVE_KEY);
   if(hintsUsedSaved !== null){
     hintsUsed = parseInt(hintsUsedSaved, 10) || 0;
+  }
+  
+  const hintKeepOpenSaved = localStorage.getItem(HINT_KEEP_OPEN_SAVE_KEY);
+  if(hintKeepOpenSaved !== null){
+    hintKeepOpen = hintKeepOpenSaved === "true";
   }
 }

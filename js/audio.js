@@ -13,7 +13,7 @@ function startMusic(){
  if(!bgMusic){
    bgMusic = new Audio(MUSIC_FILE);
    bgMusic.loop = true;
-   bgMusic.volume = 0.4;
+   bgMusic.volume = 0.8;
  }
  bgMusic.play().catch(()=>{});
  musicStarted = true;
@@ -48,6 +48,7 @@ function playCry(url){
    currentCry.currentTime = 0;
  }
  currentCry = new Audio(url);
+ currentCry.volume = 0.5;
  currentCry.play().catch(()=>{});
 }
 
