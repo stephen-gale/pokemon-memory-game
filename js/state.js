@@ -12,7 +12,7 @@ const HINTS_USED_SAVE_KEY = "hintsUsed";
 const HINT_KEEP_OPEN_SAVE_KEY = "hintKeepOpen";
 const POKEMON_DATA_CACHE_KEY = "pokemonDataCache";
 const EVOLUTION_STAGE_CACHE_KEY = "evolutionStageCache";
-const CACHE_VERSION = "v1"; // Increment this to invalidate cache
+const CACHE_VERSION = "v2"; // Increment this to invalidate cache
 
 const supportedGenerations = [
   { id: 1, label: "Gen 1", startId: 1, endId: 151 },
