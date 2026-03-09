@@ -507,20 +507,25 @@ function giveUpHintPokemon(){
     rowEl.scrollIntoView({behavior:"smooth", block:"center"});
   }
   
+  const guessInput = document.getElementById("guessInput");
+  
   // In unlimited hints mode, automatically show next hint
   if(unlimitedHints){
     const pokemon = displayHintPokemon();
     if(!pokemon){
       // No more unguessed pokemon, close the dialog
       closeHintDialog();
+    } else {
+      // Immediately refocus to keep keyboard visible
+      if(guessInput){
+        guessInput.focus();
+      }
     }
-    // Don't refocus - keep existing focus state to prevent keyboard jump
   } else {
     // In normal mode, close the hint dialog
     closeHintDialog();
-    // Restore focus only if input doesn't already have it
-    const guessInput = document.getElementById("guessInput");
-    if(guessInput && document.activeElement !== guessInput){
+    // Immediately refocus to keep keyboard visible
+    if(guessInput){
       setTimeout(() => guessInput.focus(), 100);
     }
   }
@@ -627,7 +632,11 @@ function showAnotherHint(){
   // Update another hint button state
   updateAnotherHintButton();
   
-  // Don't refocus - keep existing focus state to prevent keyboard jump
+  // Immediately refocus input to keep keyboard visible
+  const guessInput = document.getElementById("guessInput");
+  if(guessInput){
+    guessInput.focus();
+  }
 }
 
 function closeHintDialog(){
